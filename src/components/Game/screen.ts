@@ -31,9 +31,10 @@ export default class Screen {
 	update(dt: number);
 
 	// El aslo es bastant atractiue
-	activate() {
-		this.deactivated = false
-		console.log(`Activated ${this.type}`)
+	activate(difficulty) {
+	    this.deactivated = false
+	    console.log(`Activated ${this.type}`)
+	    this.initialize(difficulty)
 	}
 
 	draw() {

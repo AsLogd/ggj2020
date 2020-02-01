@@ -11,12 +11,10 @@ export default class JigsawPuzzle extends Screen {
     }
 
     update(dt: number) {
-
+	
     }
 
     draw_game() {
-	// this.game.canvas.fillStyle = 'red'
-	// this.game.canvas.fillRect(this.pos[0], this.pos[1], this.size[0], this.size[1])
     }
 
     event(key: Key) {

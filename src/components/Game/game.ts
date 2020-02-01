@@ -62,6 +62,7 @@ export default class Game {
 
 	this.time_until_next_minigame -= dt
 
+	// Screen shake
 	this.stage.position.x += (Math.random() - 0.5)
 	this.stage.position.y += (Math.random() - 0.5)
 

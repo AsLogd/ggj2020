@@ -125,8 +125,8 @@ export default class Toggle extends React.Component<ToggleProps, ToggleState>{
 		const componentClassNames = `
 			Animated-Toggle-component
 			Animated-Toggle-component--${animation}
-			Animated-Toggle-component--${className}
-			Animated-Toggle-component--state-${animState}
+			Animated-Toggle-component--${animation}--state-${animState}
+			${className}
 		`
 		// Render children if the component is not closed
 		// or we want them always mounted

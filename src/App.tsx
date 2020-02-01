@@ -1,9 +1,10 @@
 import React from 'react'
 import { render } from 'react-dom'
+import hotkeys from "hotkeys-js"
 
 import Menu from "components/View/Menu/Menu"
 import Toggle from "components/Toggle/Toggle"
-import Futile from "components/Game/Futile/Futile"
+import Repair from "components/Game/Repair"
 import { AppContext } from "./AppContext"
 
 
@@ -11,8 +12,7 @@ import "./style.scss"
 
 export const enum AppView {
 	MAIN_MENU,
-	CLASSIC_GAME,
-	NON_FUTILE_LIST,
+	GAME,
 	ABOUT
 }
 
@@ -25,7 +25,13 @@ class App extends React.Component<{}, AppState> {
 		view: AppView.MAIN_MENU
 	}
 
-	changeView(view: AppView) {
+	componentDidUpdate(){
+		hotkeys("esc", (event) => {
+			this.changeView(AppView.MAIN_MENU)
+		})
+	}
+
+	changeView = (view: AppView) => {
 		this.setState({ view })
 	}
 
@@ -39,18 +45,24 @@ class App extends React.Component<{}, AppState> {
 		const { view } = this.state
 		const isOpen = {
 			menu: view === AppView.MAIN_MENU,
-			classicGame: view === AppView.CLASSIC_GAME,
-			nonFutileList: view === AppView.NON_FUTILE_LIST,
+			game: view === AppView.GAME,
 			about: view === AppView.ABOUT,
 		}
 		return(
-			<div className="App-component__view">
+			<div className="App-component__view-container">
 				<AppContext.Provider value={this.contextImp()}>
-					<Toggle open={isOpen.menu}>
+					<Toggle open={isOpen.menu} className="App-component__view">
 						<Menu />
 					</Toggle>
-					<Toggle open={isOpen.classicGame}>
-						<Futile />
+					<Toggle open={isOpen.game} className="App-component__view">
+						<Repair />
+					</Toggle>
+					<Toggle open={isOpen.about} className="App-component__view App-component__view--about">
+						<h1>The dudes</h1>
+						<p>Aslo</p>
+						<p>Marcelino</p>
+						<p>Lali cama</p>
+						<p>Veuske</p>
 					</Toggle>
 				</AppContext.Provider>
 			</div>

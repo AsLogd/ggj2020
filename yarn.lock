@@ -755,6 +755,11 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
+"@types/keypress@^2.0.30":
+  version "2.0.30"
+  resolved "https://registry.yarnpkg.com/@types/keypress/-/keypress-2.0.30.tgz#b55c4f63b58970b30c7b8cb63f25af14a3dbda8d"
+  integrity sha512-PCS6Mrv4gbQ9167E25nuVmqerT4xM/zWuVFTLfHdQgBwmsfMj2kXR1DI3qZ5N3p21gbrPweRghci2CjMHRCWkA==
+
 "@types/prop-types@*":
   version "15.7.3"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
@@ -2456,6 +2461,11 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
+hotkeys-js@^3.7.3:
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.7.3.tgz#f0c718166e844b3e52065d1b60cffaa6065b5183"
+  integrity sha512-CSaeVPAKEEYNexYR35znMJnCqoofk7oqG/AOOqWow1qDT0Yxy+g+Y8Hs/LhGlsZaSJ7973YN6/N41LAr3t30QQ==
+
 hsl-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/hsl-regex/-/hsl-regex-1.0.0.tgz#d49330c789ed819e276a4c0d272dffa30b18fe6e"
@@ -2959,6 +2969,11 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.2.3"
     verror "1.10.0"
+
+keypress.js@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/keypress.js/-/keypress.js-2.1.5.tgz#38f96d1ded85f56115a0cafd9908e727bcd1b348"
+  integrity sha512-PQpeWxG6vNuTT0Gq20LyAzqSpeBWtQ6DTYIJB7JMJEetgF730Om9e6y82GdEv06o1iaJiH1hh2JpSOXK3zIAdA==
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"

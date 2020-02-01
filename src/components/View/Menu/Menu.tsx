@@ -13,19 +13,15 @@ export default class Menu extends React.PureComponent<{}, {}> {
 
 	render() {
 		const handler = {
-			classic: this.handleChangeView(AppView.CLASSIC_GAME),
-			nonFutile: this.handleChangeView(AppView.NON_FUTILE_LIST),
+			game: this.handleChangeView(AppView.GAME),
 			about: this.handleChangeView(AppView.ABOUT),
 		}
 		return(
 			<div className="Menu-component">
-				<h1>The Futile Game</h1>
+				<h1>Repair simulator 2020: The broken edition</h1>
 				<ul>
-					<li onClick={handler.classic}>
-						Classic
-					</li>
-					<li onClick={handler.nonFutile}>
-						Non-futile
+					<li onClick={handler.game}>
+						Start
 					</li>
 					<li onClick={handler.about}>
 						About

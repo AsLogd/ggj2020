@@ -1,18 +1,22 @@
-.animated-toggle-component{
-	&.fade.state-CLOSED {
-		display: none;
-		opacity:0;
-	}
+.Animated-Toggle-component{
+	&--fade{
+		&--state-CLOSED {
+			display: none !important;
+			opacity:0;
+		}
 
-	&.fade.state-PREOPENING,
-	&.fade.state-CLOSING {
-		opacity:0;
-	}
+		&--state-PREOPENING,
+		&--state-CLOSING {
+			opacity:0;
+		}
 
-	&.fade.state-OPENING,
-	&.fade.state-OPEN {
-		opacity:1;
-	}
+		&--state-OPENING,
+		&--state-OPEN {
+			opacity:1;
+		}
 
-	transition: opacity 300ms;
+		transition: opacity 300ms;
+	} 
+
+
 }

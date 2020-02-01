@@ -7,7 +7,10 @@
 	"license": "MIT",
 	"private": true,
 	"dependencies": {
+		"@types/keypress": "^2.0.30",
 		"@types/react": "^16.9.17",
+		"hotkeys-js": "^3.7.3",
+		"keypress.js": "^2.1.5",
 		"parcel-bundler": "^1.12.4",
 		"react": "^16.0.0",
 		"react-dom": "^16.12.0"

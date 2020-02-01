@@ -1,18 +1,30 @@
 import React from "react"
+import Game from "./game.ts"
 
-interface RepairState {
-}
 
-export default class Repair extends React.Component<{}, RepairState> {
-	state = {
-		
-	}
+export default class Repair extends React.Component<{}> {
+    canvas = React.createRef()
+    game: Game | undefined = undefined
 
-	render() {
-		return(
-			<div className="Repair-component">
-				THE GAEM
-			</div>
-		)
-	}
+    last_time = 0
+
+    componentDidMount() {
+	this.game = new Game(this.canvas.current)
+    }
+
+    update(time) {
+	const dt = (time - this.last_time)/1000
+	this.last_time = time
+
+	// requestAnimationFrame(this.update.bind(this))
+
+	this.game.update(dt)
+	this.game.draw()
+    }
+
+    render() {
+	return(
+		<canvas ref={this.canvas} width={1280} height={720}></canvas>
+	)
+    }
 }

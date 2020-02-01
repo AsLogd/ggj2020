@@ -8,12 +8,17 @@
 	"private": true,
 	"dependencies": {
 		"@types/keypress": "^2.0.30",
+		"@types/matter-js": "^0.10.9",
 		"@types/react": "^16.9.17",
 		"hotkeys-js": "^3.7.3",
 		"keypress.js": "^2.1.5",
+		"matter-js": "^0.14.2",
 		"parcel-bundler": "^1.12.4",
+		"pixi.js": "^5.2.1",
+		"planck-js": "^0.3.12",
 		"react": "^16.0.0",
-		"react-dom": "^16.12.0"
+		"react-dom": "^16.12.0",
+		"stage-js": "^0.8.11"
 	},
 	"scripts": {
 		"serve": "parcel public/index.html --open",

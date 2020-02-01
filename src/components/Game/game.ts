@@ -20,6 +20,8 @@ export default class Game {
     constructor(canvas) {
 	PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES , 16);
 	this.pixi = new PIXI.Application({width: 1280, height: 720, view: canvas})
+	this.pixi.ticker.autoStart = false
+	this.pixi.ticker.stop()
 
 	this.time_between_minigames = 3
 	this.time_until_next_minigame = this.time_between_minigames
@@ -43,6 +45,7 @@ export default class Game {
 
 	this.pixi.ticker.add((delta) => {
 	    this.update(delta)
+	    this.draw()
 	})
     }
 
@@ -58,6 +61,7 @@ export default class Game {
     }
 
     update(dt) {
+	console.log(dt)
 	this.total_time += dt
 	this.update_difficulty()
 
@@ -77,6 +81,11 @@ export default class Game {
 
 	    this.keys[key] = minigame
 	}
+    }
+
+    draw() {
+	this.minigames[MinigameType.JIGSAW_PUZZLE].draw()
+	this.renderer.render(app.stage)
     }
 
     spawn_minigame() {

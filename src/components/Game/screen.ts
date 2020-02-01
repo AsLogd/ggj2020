@@ -11,6 +11,10 @@ export default class Screen {
 	this.deactivated = true
 	this.texture = PIXI.RenderTexture.create(size[0], size[1])
 
+	this.renderer = PIXI.autoDetectRenderer({
+	    backgroundColor: 0xff0000
+	})
+
 	this.game = game
 	this.pos = pos
 	this.size = size
@@ -22,6 +26,7 @@ export default class Screen {
 
     update(dt: number);
 
+    // El aslo es bastant atractiue
     activate() {
 	this.deactivated = false
 	console.log(`Activated ${this.type}`)
@@ -36,6 +41,7 @@ export default class Screen {
     }
 
     draw_idle() {
-	this.game.renderer.render(this.sprite, this.texture)
+	this.renderer.render(this.sprite, this.texture)
     }
 }
+

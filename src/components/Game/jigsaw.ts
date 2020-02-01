@@ -6,8 +6,8 @@ import { potato } from "./assets"
 
 export default class JigsawPuzzle extends Screen {
     constructor(game, pos, size) {
-	const keys = [Key.Up, Key.Down, Key.Left, Key.Right]
-	super(game, pos, size, MinigameType.JIGSAW_PUZZLE, keys)
+        const keys = [Key.Up, Key.Down, Key.Left, Key.Right]
+        super(game, pos, size, MinigameType.JIGSAW_PUZZLE, keys)
     }
 
     update(dt: number) {
@@ -18,6 +18,6 @@ export default class JigsawPuzzle extends Screen {
     }
 
     event(key: Key) {
-	// TODO(Marce): 
+        // TODO(Marce): 
     }
 }

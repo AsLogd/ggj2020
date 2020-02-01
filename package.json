@@ -7,10 +7,13 @@
 	"license": "MIT",
 	"private": true,
 	"dependencies": {
+		"@types/howler": "^2.1.2",
 		"@types/keypress": "^2.0.30",
 		"@types/matter-js": "^0.10.9",
+		"@types/node": "^13.7.0",
 		"@types/react": "^16.9.17",
 		"hotkeys-js": "^3.7.3",
+		"howler": "^2.1.3",
 		"keypress.js": "^2.1.5",
 		"matter-js": "^0.14.2",
 		"parcel-bundler": "^1.12.4",

@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js"
 
+import Audio, {Song} from "./audio"
 import Screen from "./screen"
 import JigsawPuzzle from "./jigsaw"
 import { MinigameType } from "./types"
@@ -21,7 +22,15 @@ export default class Game {
 
 	minigames: {}
 
-	constructor(canvas) {
+	audio: Audio
+
+	constructor(canvas, audio) {
+		this.audio = audio
+		// TODO: if calling before menu song is playing, the menu song will override this song.
+		// remove setTimeout when menu is rendred. Maybe wait for audio to be loaded and decoded before starting the game
+		setTimeout(() => {
+			this.audio.playSong(Song.PLAYING)
+		}, 3000)
 		PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES, 16);
 		this.renderer = new PIXI.autoDetectRenderer({ width: 1280, height: 720, view: canvas })
 		this.stage = new PIXI.Container()
@@ -44,6 +53,8 @@ export default class Game {
 
 		document.addEventListener('keydown', this.process_keypress.bind(this))
 	}
+
+
 
 	process_keypress(ev) {
 		const mgt = this.keys[ev.key];

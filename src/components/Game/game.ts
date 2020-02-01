@@ -40,7 +40,6 @@ export default class Game {
 
 		const texture = this.minigames[MinigameType.JIGSAW_PUZZLE].texture
 		this.one_screen = PIXI.Sprite.from(texture)
-		// this.one_screen.position = {x:50, y:50}
 
 		document.addEventListener('keydown', this.process_keypress.bind(this))
 	}
@@ -68,7 +67,7 @@ export default class Game {
 
 		if (this.time_until_next_minigame <= 0) {
 			this.time_until_next_minigame = this.time_between_minigames
-			// this.spawn_minigame()
+			this.spawn_minigame()
 		}
 	}
 
@@ -108,7 +107,7 @@ export default class Game {
 		const random_type = non_running_minigames[random_type_idx]
 		const random_type_name = MinigameType[random_type]
 
-		this.minigames[random_type_name].activate()
+		this.minigames[random_type_name].activate(3)
 	}
 
 	update_difficulty() {

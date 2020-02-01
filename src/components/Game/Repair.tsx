@@ -10,16 +10,17 @@ export default class Repair extends React.Component<{}> {
 
     componentDidMount() {
 	this.game = new Game(this.canvas.current)
+	this.update(performance.now())
     }
 
     update(time) {
 	const dt = (time - this.last_time)/1000
 	this.last_time = time
 
-	// requestAnimationFrame(this.update.bind(this))
-
 	this.game.update(dt)
 	this.game.draw()
+
+	requestAnimationFrame(this.update.bind(this))
     }
 
     render() {

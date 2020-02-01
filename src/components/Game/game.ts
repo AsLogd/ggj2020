@@ -4,6 +4,8 @@ import Screen from "./screen"
 import JigsawPuzzle from "./jigsaw"
 import { MinigameType } from "./types"
 
+import { potato } from "./assets"
+
 
 export default class Game {
     canvas: HTMLCanvasElement
@@ -13,40 +15,34 @@ export default class Game {
 
     renderer: any
 
+    stage: any
+
     keys: {}
 
     minigames: {}
 
     constructor(canvas) {
 	PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES , 16);
-	this.pixi = new PIXI.Application({width: 1280, height: 720, view: canvas})
-	this.pixi.ticker.autoStart = false
-	this.pixi.ticker.stop()
+	this.renderer = new PIXI.autoDetectRenderer({width: 1280, height: 720, view: canvas})
+	this.stage = new PIXI.Container()
 
 	this.time_between_minigames = 3
 	this.time_until_next_minigame = this.time_between_minigames
 	this.total_time = 0
 
-	this.renderer = PIXI.autoDetectRenderer()
-
 	this.keys = {}
 
 	this.minigames = {
-	    [MinigameType.JIGSAW_PUZZLE]: new JigsawPuzzle(this, [100, 100], [200, 200]),
-	    [MinigameType.VERTEX_COUNT]: new JigsawPuzzle(this, [300, 100], [200, 200]),
+	    [MinigameType.JIGSAW_PUZZLE]: new JigsawPuzzle(this, [100, 100], [300, 200]),
+	    [MinigameType.VERTEX_COUNT]: new JigsawPuzzle(this, [700, 140], [300, 200]),
 	    [MinigameType.SIMON_SAYS]: new JigsawPuzzle(this, [150, 400], [200, 200]),
 	}
 
-	this.one_screen = PIXI.Sprite.from(this.minigames[MinigameType.JIGSAW_PUZZLE].texture)
-	// this.one_screen = PIXI.Sprite.from(potato)
-	this.pixi.stage.addChild(this.one_screen)
+	const texture = this.minigames[MinigameType.JIGSAW_PUZZLE].texture
+	this.one_screen = PIXI.Sprite.from(texture)
+	// this.one_screen.position = {x:50, y:50}
 
 	document.addEventListener('keydown', this.process_keypress.bind(this))
-
-	this.pixi.ticker.add((delta) => {
-	    this.update(delta)
-	    this.draw()
-	})
     }
 
     process_keypress(ev) {
@@ -61,11 +57,13 @@ export default class Game {
     }
 
     update(dt) {
-	console.log(dt)
 	this.total_time += dt
 	this.update_difficulty()
 
 	this.time_until_next_minigame -= dt
+
+	this.stage.position.x += (Math.random() - 0.5)
+	this.stage.position.y += (Math.random() - 0.5)
 
 	if (this.time_until_next_minigame <= 0) {
 	    this.time_until_next_minigame = this.time_between_minigames
@@ -85,7 +83,9 @@ export default class Game {
 
     draw() {
 	this.minigames[MinigameType.JIGSAW_PUZZLE].draw()
-	this.renderer.render(app.stage)
+	this.minigames[MinigameType.VERTEX_COUNT].draw()
+
+	this.renderer.render(this.stage)
     }
 
     spawn_minigame() {

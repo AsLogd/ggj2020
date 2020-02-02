@@ -70,6 +70,8 @@ export default class Game {
 
 	}
 
+	this.shield_activation = 0
+
 	this.minigames[MinigameType.VERTEX_COUNT_REAL].booting = false
 	this.minigames[MinigameType.RED_BUTTON].booting = false
 
@@ -104,17 +106,20 @@ export default class Game {
     		case 0:
     			this.audio.playEffect(Effect.LASER_BEAM, {pan:-1})
     			setTimeout(() => { this.audio.playEffect(Effect.FADED_BEEP, {pan: -0.8, rate: 0.8, volume:0.5})}, 100)
+    			this.shield_activation = 100
     			break
     		case 1:
 				setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan:0.2, rate: 1.5, volume:0.5})}, 100)
     			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0.7, rate: 1.3, volume:0.3})}, 1000)
     			setTimeout(() => { this.audio.playEffect(Effect.FADED_BEEP, {pan:1, rate:1.3,volume:0.5})}, 1000)
+    			this.shield_activation = 100
     			break
     		case 1:
 				setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan:0.2, rate: 1.5, volume:0.5})}, 100)
     			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0.7, rate: 1.2, volume:0.6})}, 200)
     			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0.7, rate: 0.9, volume:0.7})}, 400)
     			setTimeout(() => { this.audio.playEffect(Effect.FADED_BEEP, {pan:1,volume:0.5})}, 450)
+    			this.shield_activation = 100
     			break
     	}
     	if(this.lives <= 2) {
@@ -145,6 +150,7 @@ export default class Game {
 	this.total_time += dt
 	this.update_difficulty()
 
+	this.shield_activation = Math.max(0, this.shield_activation - dt*100)
 	this.ambientAudio()
 
 	if (this.lives <= 0) {

@@ -77,6 +77,8 @@ export default class JigsawPuzzle extends Screen {
 	    this.timeout += dt
 	    if (this.timeout >= this.time_to_lose) {
 		this.game.loseLife()
+		this.timeout = 0
+		this.deactivated = true
 	    }
 	}
 
@@ -107,6 +109,7 @@ export default class JigsawPuzzle extends Screen {
 
 	const th = (h - margin * 2)/3
 	const tw = th
+	console.log(tw*3, th*3)
 
 	let draw_count = 0
 

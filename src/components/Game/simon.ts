@@ -20,8 +20,8 @@ export default class SimonSays extends Screen {
 	keys: Key[]
 	state: SimonState
 
-	readonly pre_waiting_ms: number = 3000
-	readonly post_waiting_ms: number = 3000
+	readonly pre_waiting_ms: number = 300
+	readonly post_waiting_ms: number = 300
 
 	pre_waiting_ms_current: number
 	post_waiting_ms_current: number
@@ -88,7 +88,7 @@ export default class SimonSays extends Screen {
 		this.win = false
 		this.pre_waiting_ms_current = this.pre_waiting_ms
 		this.post_waiting_ms_current = this.post_waiting_ms
-		this.speed = difficulty+1
+	        this.speed = difficulty+1
 		const sequenceLength = (difficulty+1)
 		this.sequence=[]
 		for(let i = 0; i < sequenceLength; i++) {
@@ -96,7 +96,7 @@ export default class SimonSays extends Screen {
 		}
 		this.sequence_listen = [...this.sequence]
 		this.sequence_input = [...this.sequence]
-		this.listen_activation_intereval_base = 1500/this.speed
+		this.listen_activation_intereval_base = 700/this.speed
 		this.listen_activation_intereval_current = this.listen_activation_intereval_base
 		this.input_timeout = 10000/(this.speed/2.5)
 	}

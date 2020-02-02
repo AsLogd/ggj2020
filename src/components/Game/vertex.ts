@@ -39,7 +39,7 @@ export default class VertexPuzzle extends Screen {
 
 export class VertexReal extends Screen {
     constructor(game, pos, size) {
-	this.keys = []
+	this.keys = [Key.N1, Key.N2, Key.N3, Key.N4, Key.N5, Key.N6, Key.N7, Key.N8, Key.N9, Key.N0]
 	super(game, pos, size, MinigameType.VERTEX_COUNT_REAL, this.keys)
 
 	this.enemy_g = new PIXI.Graphics()
@@ -57,26 +57,64 @@ export class VertexReal extends Screen {
 	this.radar_circle.pivot = {x: size[0]/2, y: size[1]/2}
 	this.radar_circle.position = {x: size[0]/2, y: size[1]/2}
 
+	this.time_to_timeout = 5
+	this.timeout = 0
+
 	this.enemies = []
     }
 
-    initialize(difficulty: number) {}
+    initialize(difficulty: number) {
+	this.timeout = 0
+    }
 
     update(dt: number) {
-	this.deactivated = false
+	if (this.deactivated) {
+	    if (Math.random() < 0.3) {
+		if (this.enemies.length < 9) {
+		    this.enemies.push({x: Math.random() * this.size[0],
+				    y: Math.random() * this.size[1],
+				    d: (Math.random() - 0.5) * 2 * Math.PI
+				    dead: false})
+		}
+		else {
+		    for (let i = 0; i < this.enemies.length; ++i) {
+			if (this.enemies[i].dead) {
+			    this.enemies[i].x = Math.random() * this.size[0]
+			    this.enemies[i].y = Math.random() * this.size[1]
+			    this.enemies[i].d = (Math.random() - 0.5) * 2 * Math.PI
+			    this.enemies[i].dead = false
+			    break
+			}
+		    }
+		}
+	    }
 
-	if (Math.random() < 0.005) {
-	    this.enemies.push({x: Math.random() * this.size[0],
-			       y: Math.random() * this.size[1],
-			       d: (Math.random() - 0.5) * 2 * Math.PI })
+	    if (Math.random() < 0.25) {
+		const choose = Math.floor(Math.random() * this.enemies.length)
+		if (this.enemies[choose]) {
+		    this.enemies[choose].dead = true
+		}
+	    }
+
+	    for (let i = 0; i < this.enemies.length; ++i) {
+		const enemy = this.enemies[i];
+
+		enemy.d += (Math.random() - 0.5) * 0.1
+		enemy.x += dt * 30 * Math.cos(enemy.d)
+		enemy.y += dt * 30 * Math.sin(enemy.d)
+
+		if (enemy.x < 0 || enemy.x > this.size[0] || enemy.y < 0 || enemy.y > this.size[1]) {
+		    enemy.dead = true
+		}
+	    }
 	}
-	
-	for (let i = 0; i < this.enemies.length; ++i) {
-	    const enemy = this.enemies[i];
+	else {
+	    this.timeout += dt
 
-	    enemy.d += (Math.random() - 0.5) * 0.1
-	    enemy.x += dt * 15 * Math.cos(enemy.d)
-	    enemy.y += dt * 15 * Math.sin(enemy.d)
+	    if (this.timeout >= this.time_to_timeout) {
+		this.game.loseLife()
+		this.deactivated = true
+	    }
 	}
 
 	this.radar_circle.rotation += 0.15
@@ -84,11 +122,53 @@ export class VertexReal extends Screen {
 
     draw_game() {
 	this.game.renderer.render(this.radar_circle, this.texture, false)
+	
+	for (let i = 0; i < this.enemies.length; ++i) {
+	    if (this.enemies[i].dead) {
+		continue
+	    }
+
+	    this.enemy_g.tint = 0xff0000
+	    this.enemy_g.position.x = Math.floor(this.enemies[i].x/10)*10
+	    this.enemy_g.position.y = Math.floor(this.enemies[i].y/10)*10
+	    this.game.renderer.render(this.enemy_g, this.texture, false)
+	}
+
+	this.enemy_g.tint = 0xffffff
+    }
+
+    draw_idle() {
+	this.game.renderer.render(this.radar_circle, this.texture, false)
 
 	for (let i = 0; i < this.enemies.length; ++i) {
+	    if (this.enemies[i].dead) {
+		continue
+	    }
+
+	    this.enemy_g.position.x = Math.floor(this.enemies[i].x/10)*10
+	    this.enemy_g.position.y = Math.floor(this.enemies[i].y/10)*10
 	    this.game.renderer.render(this.enemy_g, this.texture, false)
 	}
     }
 
-    event(key: Key) {}
+    event(key: Key) {
+	const num = parseInt(key)
+
+	let cenemies = 0
+	for (let i = 0; i < this.enemies.length; ++i) {
+	    if (!this.enemies[i].dead) {
+		cenemies += 1
+	    }
+	}
+
+	if (!this.deactivated) {
+	    if (num === cenemies) {
+		this.deactivated = true
+	    }
+	    else {
+		this.game.loseLife()
+		this.deactivated = true
+	    }
+	}
+    }
 }

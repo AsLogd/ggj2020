@@ -50,7 +50,7 @@ export default class Game {
 	this.background.tint = 0x666666
 	this.stage.addChild(this.background)
 
-	this.time_between_minigames = 15
+	this.time_between_minigames = 3
 	this.time_until_next_minigame = 5
 	this.total_time = 0
 
@@ -79,12 +79,20 @@ export default class Game {
     }
 
     process_keypress(ev) {
-	const mgt = this.keys[ev.key];
+	console.log(ev)
+	let key = ev.key
+	const num = parseInt(key)
+
+	if (!isNaN(num)) {
+	    key = num
+	}
+
+	const mgt = this.keys[key];
 
 	if (mgt !== undefined) {
 	    const mg = this.minigames[mgt]
 	    if (mg) {
-		mg.event(ev.key)
+		mg.event(key)
 	    }
 	}
     }
@@ -94,7 +102,7 @@ export default class Game {
     }
 
     winLife() {
-	this.lives = Math.min(5, this.lives+1)
+	this.lives = Math.min(4, this.lives+1)
     }
 
     ambientAudio() {
@@ -179,7 +187,7 @@ export default class Game {
 	this.stage.position.y += (Math.random() - (0.5 + far_y * this.correction_dampening)) * this.shaking_distance 
 
 	if (this.lost) {
-		this.audio.playSong(Song.DEAD)
+	    this.audio.playSong(Song.DEAD)
 	    this.minigames[MinigameType.JIGSAW_PUZZLE].sprite.rotation = 0.5 + Math.cos(this.total_time) * 0.1
 	    this.minigames[MinigameType.VERTEX_COUNT_REAL].sprite.rotation = 0.5 + Math.cos(this.total_time + 4) * 0.1
 	    this.minigames[MinigameType.VERTEX_COUNT].sprite.rotation = 0.5 + Math.cos(this.total_time + 10) * 0.1
@@ -207,6 +215,8 @@ export default class Game {
 
 	    this.keys[key] = minigame
 	}
+
+	console.log(this.keys)
     }
 
     draw() {

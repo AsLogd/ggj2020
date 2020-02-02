@@ -73,8 +73,8 @@ class App extends React.Component<{}, AppState> {
 						<h1>The dudes</h1>
 						<p>Aslo</p>
 						<p>Marcelino</p>
-						<p>Lali cama</p>
-						<p>Veuske</p>
+						<p>Lali</p>
+						<p>Veuskemini</p>
 					</Toggle>
 				</AppContext.Provider>
 			</div>
@@ -106,7 +106,7 @@ class App extends React.Component<{}, AppState> {
 	}
 
 	render() {
-		
+		/*
 		return (
 			<div className="App-component">
 				<div className="App-component__view-container">
@@ -115,13 +115,13 @@ class App extends React.Component<{}, AppState> {
 
 							<Repair />
 
-							{ /*this.renderAudioTestBed()*/ }
+							{ /*this.renderAudioTestBed()
 						</AppContext.Provider>
 					</div>
 				</div>
 			</div>
 		)
-
+*/
 		return (
 			<div className="App-component">
 				{this.renderViewElement()}

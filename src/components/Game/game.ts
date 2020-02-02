@@ -32,9 +32,9 @@ export default class Game {
 	this.audio = audio
 	// TODO: if calling before menu song is playing, the menu song will override this song.
 	// remove setTimeout when menu is rendred. Maybe wait for audio to be loaded and decoded before starting the game
-	setTimeout(() => {
+	//setTimeout(() => {
 		this.audio.playSong(Song.PLAYING)
-	}, 3000)
+	//}, 3000)
 
 	PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES, 16);
 	this.renderer = new PIXI.autoDetectRenderer({ width: 1280, height: 720, view: canvas })

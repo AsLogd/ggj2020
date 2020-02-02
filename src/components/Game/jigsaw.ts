@@ -83,8 +83,6 @@ export default class JigsawPuzzle extends Screen {
 	    }
 	}
 
-	console.log("waddup")
-
 	this.deactivated = true
     }
 
@@ -92,12 +90,12 @@ export default class JigsawPuzzle extends Screen {
 	const w = this.size[0]
 	const h = this.size[1]
 
-	const tw = 180/3
-	const th = 180/3
+	const margin = 5 
+
+	const th = (h - margin * 2)/3
+	const tw = th
 
 	let draw_count = 0
-	const last_bc = this.game.renderer.backgroundColor
-	this.game.renderer.backgroundColor = 0xff0000
 
 	for (let i = 0; i < 3; ++i) {
 	    for (let j = 0; j < 3; ++j) {
@@ -106,8 +104,8 @@ export default class JigsawPuzzle extends Screen {
 		    continue;
 		}
 
-		const x = j * tw
-		const y = i * th
+		const x = j * tw + margin
+		const y = i * th + margin
 
 		const uv_x = (idx % 3) * tw
 		const uv_y = (Math.floor(idx / 3)) * th
@@ -116,16 +114,14 @@ export default class JigsawPuzzle extends Screen {
 		this.puzzle_sprite.height = th
 		this.puzzle_sprite.position.x = x
 		this.puzzle_sprite.position.y = y
-		this.puzzle_sprite.texture.frame = new PIXI.Rectangle(uv_x, uv_y, tw, th)
+		const text_w = this.puzzle_sprite.texture.width / 3
+		const text_h = this.puzzle_sprite.texture.height / 3
+		this.puzzle_sprite.texture.frame = new PIXI.Rectangle(uv_x, uv_y, text_w, text_h)
 
-		const clear = draw_count === 0
-		this.game.renderer.render(this.puzzle_sprite, this.texture, clear)
+		this.game.renderer.render(this.puzzle_sprite, this.texture, false)
 		draw_count += 1
 	    }
 	}
-
-	this.game.renderer.backgroundColor = last_bc
-
     }
 
     event(key: Key) {

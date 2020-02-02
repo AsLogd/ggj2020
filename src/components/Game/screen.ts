@@ -32,7 +32,7 @@ export default class Screen {
 	this.size = size
 	this.type = minigametype
 
-	this.crt_filter = new CRTFilter({curvature: 2, verticalLine: false})
+	this.crt_filter = new CRTFilter({curvature: 2, verticalLine: true})
 	this.sprite.filters = [this.crt_filter]
 	this.background.filters = [this.crt_filter]
 

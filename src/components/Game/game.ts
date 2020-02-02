@@ -5,7 +5,7 @@ import Screen from "./screen"
 import JigsawPuzzle from "./jigsaw"
 import { MinigameType } from "./types"
 
-import { potato } from "./assets"
+import { background_image } from "./assets"
 
 
 export default class Game {
@@ -25,15 +25,22 @@ export default class Game {
     audio: Audio
 
     constructor(canvas, audio) {
-	    this.audio = audio
-	    // TODO: if calling before menu song is playing, the menu song will override this song.
-	    // remove setTimeout when menu is rendred. Maybe wait for audio to be loaded and decoded before starting the game
-	    setTimeout(() => {
-		    this.audio.playSong(Song.PLAYING)
-	    }, 3000)
-	    PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES, 16);
-	    this.renderer = new PIXI.autoDetectRenderer({ width: 1280, height: 720, view: canvas })
-	    this.stage = new PIXI.Container()
+	this.audio = audio
+	// TODO: if calling before menu song is playing, the menu song will override this song.
+	// remove setTimeout when menu is rendred. Maybe wait for audio to be loaded and decoded before starting the game
+	setTimeout(() => {
+		this.audio.playSong(Song.PLAYING)
+	}, 3000)
+
+	PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES, 16);
+	this.renderer = new PIXI.autoDetectRenderer({ width: 1280, height: 720, view: canvas })
+	this.stage = new PIXI.Container()
+	this.stage.children.sort((a, b) => {
+	    return Math.random() < 0.5
+	})
+
+	this.background = PIXI.Sprite.from(background_image)
+	this.stage.addChild(this.background)
 
 	this.time_between_minigames = 3
 	this.time_until_next_minigame = this.time_between_minigames
@@ -42,10 +49,11 @@ export default class Game {
 	this.keys = {}
 
 	this.minigames = {
-	    [MinigameType.JIGSAW_PUZZLE]: new JigsawPuzzle(this, [100, 100], [300, 200]),
-	    [MinigameType.VERTEX_COUNT]: new JigsawPuzzle(this, [700, 140], [300, 200]),
+	    [MinigameType.JIGSAW_PUZZLE]: new JigsawPuzzle(this, [440, 430], [400, 180]),
+	    [MinigameType.VERTEX_COUNT]: new JigsawPuzzle(this, [440, 60], [400, 240]),
 	    [MinigameType.SIMON_SAYS]: new JigsawPuzzle(this, [150, 400], [200, 200]),
 	}
+
 
 	const texture = this.minigames[MinigameType.JIGSAW_PUZZLE].texture
 	this.one_screen = PIXI.Sprite.from(texture)
@@ -71,8 +79,9 @@ export default class Game {
 	this.time_until_next_minigame -= dt
 
 	// Screen shake
-	this.stage.position.x += (Math.random() - 0.5) * 1.5
-	this.stage.position.y += (Math.random() - 0.5) * 1.5
+	this.stage.position.x += (Math.random() - 0.5)
+	this.stage.position.y += (Math.random() - 0.5)
+	this.stage.position.z = -1
 
 	this.minigames[MinigameType.JIGSAW_PUZZLE].update(dt)
 
@@ -93,6 +102,7 @@ export default class Game {
     }
 
     draw() {
+
 	this.minigames[MinigameType.JIGSAW_PUZZLE].draw()
 	this.minigames[MinigameType.VERTEX_COUNT].draw()
 

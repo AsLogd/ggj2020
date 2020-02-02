@@ -44,9 +44,11 @@ export default class Game {
 	this.background.tint = 0x666666
 	this.stage.addChild(this.background)
 
-	this.time_between_minigames = 3
-	this.time_until_next_minigame = this.time_between_minigames
+	this.time_between_minigames = 15
+	this.time_until_next_minigame = 5
 	this.total_time = 0
+
+	this.booting = true
 
 	this.keys = {}
 
@@ -60,6 +62,8 @@ export default class Game {
 	this.one_screen = PIXI.Sprite.from(texture)
 
 	document.addEventListener('keydown', this.process_keypress.bind(this))
+
+	this.alarm_mode = true
     }
 
     process_keypress(ev) {
@@ -79,10 +83,23 @@ export default class Game {
 
 	this.time_until_next_minigame -= dt
 
+	if (this.alarm_mode) {
+	    this.background.tint = (Math.cos(this.total_time * 4) * 0x66 + 0x66) << 16
+	}
+	else {
+	    if (this.background.tint < 0x666666) {
+		this.background.tint += 0x010101
+	    } else {
+		this.background.tint = 0x666666
+	    }
+	}
+
 	// Screen shake
-	this.stage.position.x += (Math.random() - 0.5)
-	this.stage.position.y += (Math.random() - 0.5)
-	this.stage.position.z = -1
+	const far_x = this.stage.position.x - 0
+	const far_y = this.stage.position.y - 0
+
+	this.stage.position.x += (Math.random() - (0.5 + far_x * 0.1)) * 2.5
+	this.stage.position.y += (Math.random() - (0.5 + far_y * 0.1)) * 2.5
 
 	this.minigames[MinigameType.JIGSAW_PUZZLE].update(dt)
 
@@ -103,11 +120,16 @@ export default class Game {
     }
 
     draw() {
-
 	this.minigames[MinigameType.JIGSAW_PUZZLE].draw()
 	this.minigames[MinigameType.VERTEX_COUNT].draw()
 
 	this.renderer.render(this.stage)
+    }
+
+    booting_end() {
+	this.alarm_mode = false
+	this.booting = false
+	this.background.tint += 0x000000
     }
 
     spawn_minigame() {

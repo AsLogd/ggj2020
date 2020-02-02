@@ -35446,6 +35446,8 @@ module.exports = "/pixel_nemesis.718d1454.ogg";
 module.exports = "/subliminal_interpolation.1d850f2b.ogg";
 },{}],"audio/energetic_breakdown.ogg":[function(require,module,exports) {
 module.exports = "/energetic_breakdown.4ce50d2f.ogg";
+},{}],"audio/gameover.ogg":[function(require,module,exports) {
+module.exports = "/gameover.7fce0fdf.ogg";
 },{}],"audio/FX_File_ext.ogg":[function(require,module,exports) {
 module.exports = "/FX_File_ext.71df75c2.ogg";
 },{}],"../src/components/Game/audio.ts":[function(require,module,exports) {
@@ -35467,6 +35469,7 @@ exports.Song = Song;
   Song["MENU"] = "MENU";
   Song["PLAYING"] = "PLAYING";
   Song["DEAD"] = "DEAD";
+  Song["GAME_OVER"] = "GAME_OVER";
 })(Song || (exports.Song = Song = {}));
 
 var Effect;
@@ -35500,7 +35503,7 @@ exports.Effect = Effect;
 
 var effectData = (_a = {}, _a[Effect.LONG_BEEP] = [0, 3400], _a[Effect.BEEP_SEQUENCE] = [10300, 1050], _a[Effect.SONAR_BEEP] = [24000, 2000], _a[Effect.FADED_BEEP] = [30800, 2100], _a[Effect.BEEP_LOSE] = [34300, 1100], _a[Effect.BEEP_WIN] = [37700, 1100], _a[Effect.BEEP_RESTORE] = [48000, 2500], _a[Effect.COMPLEX_BEEP_LOSE] = [51400, 2300], _a[Effect.BULLET_IMPACT] = [3400, 1100], _a[Effect.EXPLOSION] = [20500, 2500], _a[Effect.IMPACT_EXPLOSION] = [6800, 1771], _a[Effect.DEEP_EXPLOSION] = [13690, 1810], _a[Effect.PIXEL_EXPLOSION] = [61600, 500], _a[Effect.RESENTING_HULL] = [54800, 2200], _a[Effect.DESTRUCTION] = [27400, 3400], _a[Effect.LASER_BEAM] = [17100, 500], _a[Effect.LONG_EFFECT] = [41100, 3400], _a[Effect.DYING_BOT] = [44500, 1200], _a[Effect.STATIC_RADIO] = [58300, 300], _a[Effect.SIMON_A] = [65200, 1100], _a[Effect.SIMON_B] = [68600, 1100], _a[Effect.SIMON_C] = [71900, 1100], _a[Effect.SIMON_D] = [75400, 1100], _a); //TODO: add webm audio assets
 
-var songFileUrls = (_b = {}, _b[Song.MENU] = require("../../../public/audio/pixel_nemesis.ogg"), _b[Song.PLAYING] = require("../../../public/audio/subliminal_interpolation.ogg"), _b[Song.DEAD] = require("../../../public/audio/energetic_breakdown.ogg"), _b);
+var songFileUrls = (_b = {}, _b[Song.MENU] = require("../../../public/audio/pixel_nemesis.ogg"), _b[Song.PLAYING] = require("../../../public/audio/subliminal_interpolation.ogg"), _b[Song.DEAD] = require("../../../public/audio/energetic_breakdown.ogg"), _b[Song.GAME_OVER] = require("../../../public/audio/gameover.ogg"), _b);
 
 var effectSpriteSoundUrl = require("../../../public/audio/FX_File_ext.ogg");
 
@@ -35538,6 +35541,7 @@ function () {
       return s.stop();
     });
     this.songsDict[song].play();
+    console.log(this.songsDict, song);
   };
 
   Audio.prototype.playEffect = function (effect, opt) {
@@ -35571,7 +35575,7 @@ function () {
 
 var _default = Audio;
 exports.default = _default;
-},{"howler":"../node_modules/howler/dist/howler.js","../../../public/audio/pixel_nemesis.ogg":"audio/pixel_nemesis.ogg","../../../public/audio/subliminal_interpolation.ogg":"audio/subliminal_interpolation.ogg","../../../public/audio/energetic_breakdown.ogg":"audio/energetic_breakdown.ogg","../../../public/audio/FX_File_ext.ogg":"audio/FX_File_ext.ogg"}],"../src/AppContext.ts":[function(require,module,exports) {
+},{"howler":"../node_modules/howler/dist/howler.js","../../../public/audio/pixel_nemesis.ogg":"audio/pixel_nemesis.ogg","../../../public/audio/subliminal_interpolation.ogg":"audio/subliminal_interpolation.ogg","../../../public/audio/energetic_breakdown.ogg":"audio/energetic_breakdown.ogg","../../../public/audio/gameover.ogg":"audio/gameover.ogg","../../../public/audio/FX_File_ext.ogg":"audio/FX_File_ext.ogg"}],"../src/AppContext.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35590,116 +35594,8 @@ var AppContext = React.createContext({
   getAudio: function getAudio() {}
 });
 exports.AppContext = AppContext;
-},{"react":"../node_modules/react/index.js"}],"../src/components/View/Menu/Menu.tsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var React = _interopRequireWildcard(require("react"));
-
-var _App = require("../../../App");
-
-var _AppContext = require("../../../AppContext");
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-var __extends = void 0 && (void 0).__extends || function () {
-  var _extendStatics = function extendStatics(d, b) {
-    _extendStatics = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (d, b) {
-      d.__proto__ = b;
-    } || function (d, b) {
-      for (var p in b) {
-        if (b.hasOwnProperty(p)) d[p] = b[p];
-      }
-    };
-
-    return _extendStatics(d, b);
-  };
-
-  return function (d, b) {
-    _extendStatics(d, b);
-
-    function __() {
-      this.constructor = d;
-    }
-
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-}();
-
-var Menu =
-/** @class */
-function (_super) {
-  __extends(Menu, _super);
-
-  function Menu() {
-    var _this = _super !== null && _super.apply(this, arguments) || this;
-
-    _this.handleChangeView = function (view) {
-      return function () {
-        _this.context.changeView(view);
-      };
-    };
-
-    return _this;
-  }
-
-  Menu.prototype.render = function () {
-    var handler = {
-      game: this.handleChangeView(_App.AppView.GAME),
-      about: this.handleChangeView(_App.AppView.ABOUT)
-    };
-    return React.createElement("div", {
-      className: "Menu-component"
-    }, React.createElement("h1", null, "Repair simulator 2020: The broken edition"), React.createElement("ul", null, React.createElement("li", {
-      onClick: handler.game
-    }, "Start"), React.createElement("li", {
-      onClick: handler.about
-    }, "About")));
-  };
-
-  Menu.contextType = _AppContext.AppContext;
-  return Menu;
-}(React.PureComponent);
-
-var _default = Menu;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","../../../App":"../src/App.tsx","../../../AppContext":"../src/AppContext.ts"}],"../src/misc/Util.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.DOMreflow = DOMreflow;
-exports.mapRange = mapRange;
-
-// Waits a couple of frames
-function DOMreflow() {
-  var frames = 2;
-  var resolve;
-  var p = new Promise(function (res) {
-    resolve = res;
-  });
-
-  function frame() {
-    frames--;
-    if (!frames) resolve();else requestAnimationFrame(frame);
-  }
-
-  requestAnimationFrame(frame);
-  return p;
-}
-
-function mapRange(value, in_min, in_max, out_min, out_max) {
-  return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
+},{"react":"../node_modules/react/index.js"}],"nau.png":[function(require,module,exports) {
+module.exports = "/nau.6471b526.png";
 },{}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
@@ -35767,7 +35663,129 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../src/components/Toggle/style.scss":[function(require,module,exports) {
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../src/components/View/Menu/style.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/View/Menu/Menu.tsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _App = require("../../../App");
+
+var _AppContext = require("../../../AppContext");
+
+require("./style.scss");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var __extends = void 0 && (void 0).__extends || function () {
+  var _extendStatics = function extendStatics(d, b) {
+    _extendStatics = Object.setPrototypeOf || {
+      __proto__: []
+    } instanceof Array && function (d, b) {
+      d.__proto__ = b;
+    } || function (d, b) {
+      for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p];
+      }
+    };
+
+    return _extendStatics(d, b);
+  };
+
+  return function (d, b) {
+    _extendStatics(d, b);
+
+    function __() {
+      this.constructor = d;
+    }
+
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+
+var nau = require("../../../../public/nau.png");
+
+var Menu =
+/** @class */
+function (_super) {
+  __extends(Menu, _super);
+
+  function Menu() {
+    var _this = _super !== null && _super.apply(this, arguments) || this;
+
+    _this.handleChangeView = function (view) {
+      return function () {
+        _this.context.changeView(view);
+      };
+    };
+
+    return _this;
+  }
+
+  Menu.prototype.render = function () {
+    var handler = {
+      game: this.handleChangeView(_App.AppView.GAME),
+      about: this.handleChangeView(_App.AppView.ABOUT)
+    };
+    return React.createElement("div", {
+      className: "Menu-component"
+    }, React.createElement("img", {
+      src: nau,
+      className: "nau"
+    }), React.createElement("h1", null, "Repair simulator 2020: The broken edition"), React.createElement("ul", null, React.createElement("li", {
+      onClick: handler.game
+    }, "Start"), React.createElement("li", {
+      onClick: handler.about
+    }, "About")));
+  };
+
+  Menu.contextType = _AppContext.AppContext;
+  return Menu;
+}(React.PureComponent);
+
+var _default = Menu;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","../../../App":"../src/App.tsx","../../../AppContext":"../src/AppContext.ts","../../../../public/nau.png":"nau.png","./style.scss":"../src/components/View/Menu/style.scss"}],"../src/misc/Util.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DOMreflow = DOMreflow;
+exports.mapRange = mapRange;
+
+// Waits a couple of frames
+function DOMreflow() {
+  var frames = 2;
+  var resolve;
+  var p = new Promise(function (res) {
+    resolve = res;
+  });
+
+  function frame() {
+    frames--;
+    if (!frames) resolve();else requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+  return p;
+}
+
+function mapRange(value, in_min, in_max, out_min, out_max) {
+  return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+},{}],"../src/components/Toggle/style.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -80505,8 +80523,8 @@ var _default = Screen;
 exports.default = _default;
 },{"pixi.js":"../node_modules/pixi.js/lib/pixi.es.js","./types":"../src/components/Game/types.ts","./textbuffer.ts":"../src/components/Game/textbuffer.ts","@pixi/filter-crt":"../node_modules/@pixi/filter-crt/lib/filter-crt.esm.js","@pixi/filter-bloom":"../node_modules/@pixi/filter-bloom/lib/filter-bloom.esm.js"}],"potato.png":[function(require,module,exports) {
 module.exports = "/potato.d033d3ec.png";
-},{}],"map.jpeg":[function(require,module,exports) {
-module.exports = "/map.d3a6dde1.jpeg";
+},{}],"repair.png":[function(require,module,exports) {
+module.exports = "/repair.27019c34.png";
 },{}],"../src/components/Game/screen.frag":[function(require,module,exports) {
 module.exports = "#define GLSLIFY 1\n#define PI 3.14159265359\n// Emulated CRT resolution\n#define FAKE_RES (iResolution.xy/6.0)\n\n// ------ PARAMETERS ------\nvec2 fishEye = vec2(-0.03,-0.05); // Fish-eye warp factor\nfloat crtOutIntensity = 1.1; // intensity of crt cell outline\nfloat crtInIntensity = 0.9; // intensity of crt cell inside\nfloat scanIntensity = 1.1; // intensity of scanlines\nfloat aberrationIntensity = 5.; // Intensity of chromatic aberration\nfloat grainIntensity = 0.3; // Intensity of film grain\nfloat haloRadius = 1.8; // Radius of the ellipsis halo\nfloat blurIntensity = 0.4; // Intensity of the radial blur\nfloat scratchesIntensity = 3.; // Intensity of screen scratches\n\nvec2 iResolution = vec2(300, 300);\n// ------------------------\n\nvarying vec2 vUvs;\nuniform sampler2D uSampler0;\nfloat iTime = 0.0;\n\nvec3 surface(vec2 uv) {\n  return texture2D(uSampler0, uv).rgb;\n}\n\n// Fish-eye effect\nvec2 fisheye(vec2 uv){\n  uv = uv*2.0 - 1.0;    \n  uv *= vec2(1.0+(uv.y*uv.y)*fishEye.x,1.0+(uv.x*uv.x)*fishEye.y);\n  return uv*0.5 + 0.5;\n}\n\n// Scanlines chromatic aberration\nvec3 aberration(vec2 uv) {\n    float o = sin(uv.y * iResolution.x * PI);\n    o *= aberrationIntensity / iResolution.x;\n    return vec3(surface(vec2( uv.x+o, uv.y+o )).x, surface(vec2( uv.x, uv.y+o )).y, surface(vec2( uv.x+o, uv.y )).z);    \n}\n\n// Draw smoothed scanlines\nfloat scanLines(vec2 uv){\n  float dy = uv.y * FAKE_RES.y;\n  dy = fract(dy) - 0.5;\n  return exp2(-dy*dy*scanIntensity);\n}\n\n// CRT cells\nvec3 crt(vec2 xy){\n  xy=floor(xy*vec2(1.0,0.5));\n  xy.x += xy.y*3.0;\n  vec3 c = vec3(crtOutIntensity,crtOutIntensity,crtOutIntensity);\n  xy.x = fract(xy.x/6.0);\n    \n  if(xy.x < 0.333)\n      c.r=crtInIntensity;\n  else if(xy.x < 0.666)\n      c.g=crtInIntensity;\n  else \n      c.b=crtInIntensity;\n  return c;\n}    \n\n// from rez in Glenz vector form Hell\nfloat rand(in vec2 p,in float t) {\n\treturn fract(sin(dot(p+mod(t,1.0),vec2(12.9898,78.2333)))*43758.5453);\n}\n\n// Film grain\nfloat grain(vec2 uv) {\n    return 1.0-grainIntensity+grainIntensity*rand(uv,iTime);\n}\n\n// Halo\nfloat halo(vec2 uv) {    \n    return haloRadius-distance(uv,vec2(0.2,0.5))-distance(uv,vec2(0.8,0.5));\n}\n\n// Screen scratches\nvec3 screenshit(vec2 uv) {\n\tfloat c = 0.5*texture2D(uSampler0, uv).r + 0.3*texture2D(uSampler0, uv*5.0).r + 0.2*texture2D(uSampler0, uv/2.0).r;\n    c = (max(c, 0.78)-0.78)*scratchesIntensity;\n    return vec3(smoothstep(0.,1.,c));\n}\n\n// Radial blur\nvec3 blur(vec2 uv) {\n    vec3 col = vec3(0.0,0.0,0.0);\n    vec2 d = (vec2(0.5,0.5)-uv)/32.;\n    float w = 1.0;\n    vec2 s = uv;\n    for( int i=0; i<32; i++ )\n    {\n        vec3 res = surface(vec2(s.x,s.y));\n        col += w*smoothstep( 0.0, 1.0, res );\n        w *= .985;\n        s += d;\n    }\n    col = col * 4.5 / 32.;\n\treturn blurIntensity*vec3( 0.2*col + 0.8*surface(uv));\n}\n\nvoid main(){\n    vec2 uv = fisheye(vUvs/iResolution.xy);\n    vec4 fragColor;\n    fragColor.rgb = aberration(uv) + screenshit(uv) + blur(uv);\n    fragColor.rgb *= scanLines(uv) * crt(gl_FragCoord.xy) * grain(uv) * halo(uv) * 0.6;\n    gl_FragColor = fragColor;\n}";
 },{}],"GAMEJAM_2020_MAIN.png":[function(require,module,exports) {
@@ -80523,7 +80541,7 @@ var potato = require("../../../public/potato.png");
 
 exports.potato = potato;
 
-var map = require("../../../public/map.jpeg");
+var map = require("../../../public/repair.png");
 
 exports.map = map;
 
@@ -80534,7 +80552,7 @@ exports.screen_frag = screen_frag;
 var background_image = require("../../../public/GAMEJAM_2020_MAIN.png");
 
 exports.background_image = background_image;
-},{"../../../public/potato.png":"potato.png","../../../public/map.jpeg":"map.jpeg","./screen.frag":"../src/components/Game/screen.frag","../../../public/GAMEJAM_2020_MAIN.png":"GAMEJAM_2020_MAIN.png"}],"../src/components/Game/jigsaw.ts":[function(require,module,exports) {
+},{"../../../public/potato.png":"potato.png","../../../public/repair.png":"repair.png","./screen.frag":"../src/components/Game/screen.frag","../../../public/GAMEJAM_2020_MAIN.png":"GAMEJAM_2020_MAIN.png"}],"../src/components/Game/jigsaw.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -81203,6 +81221,8 @@ exports.default = void 0;
 
 var PIXI = _interopRequireWildcard(require("pixi.js"));
 
+var Util = _interopRequireWildcard(require("misc/Util"));
+
 var _screen = _interopRequireDefault(require("./screen"));
 
 var _types = require("./types");
@@ -81320,7 +81340,13 @@ function (_super) {
     var h = this.size[1];
     var partSize = 80;
     var margin = 5;
-    var shipPosition = [w / 2 + partSize / 2, h / 2 + partSize]; //top
+    var shipPosition = [w / 2 + partSize / 2, h / 2 + partSize];
+    var shield = new PIXI.Graphics();
+    shield.lineStyle(4, 0xAAAAFF, 1);
+    shield.drawCircle(shipPosition[0] - partSize / 2, shipPosition[1] - partSize, 130);
+    shield.endFill();
+    shield.alpha = Util.mapRange(this.game.shield_activation, 0, 100, 0, 1);
+    stage.addChild(shield); //top
 
     stage.addChild(this.create_triangle(0, shipPosition[0], shipPosition[1] - partSize - margin / 2, partSize, 180)); //left
 
@@ -81344,7 +81370,7 @@ function (_super) {
 
 var _default = Status;
 exports.default = _default;
-},{"pixi.js":"../node_modules/pixi.js/lib/pixi.es.js","./screen":"../src/components/Game/screen.ts","./types":"../src/components/Game/types.ts"}],"../src/components/Game/vertex.ts":[function(require,module,exports) {
+},{"pixi.js":"../node_modules/pixi.js/lib/pixi.es.js","misc/Util":"../src/misc/Util.ts","./screen":"../src/components/Game/screen.ts","./types":"../src/components/Game/types.ts"}],"../src/components/Game/vertex.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -81629,14 +81655,12 @@ function () {
   function Game(canvas, audio) {
     var _a;
 
-    var _this = this;
-
     this.audio = audio; // TODO: if calling before menu song is playing, the menu song will override this song.
     // remove setTimeout when menu is rendred. Maybe wait for audio to be loaded and decoded before starting the game
+    //setTimeout(() => {
 
-    setTimeout(function () {
-      _this.audio.playSong(_audio.Song.PLAYING);
-    }, 3000);
+    this.audio.playSong(_audio.Song.PLAYING); //}, 3000)
+
     PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES, 16);
     this.renderer = new PIXI.autoDetectRenderer({
       width: 1280,
@@ -81657,8 +81681,10 @@ function () {
     this.total_time = 0;
     this.booting = true;
     this.lives = 4;
+    this.over_song = false;
     this.keys = {};
     this.minigames = (_a = {}, _a[_types.MinigameType.JIGSAW_PUZZLE] = new _jigsaw.default(this, [440, 430], [390, 180]), _a[_types.MinigameType.VERTEX_COUNT] = new _vertex.default(this, [440, 65], [390, 245]), _a[_types.MinigameType.SIMON_SAYS] = new _simon.default(this, [60, 510], [320, 110]), _a[_types.MinigameType.VERTEX_COUNT_REAL] = new _vertex.VertexReal(this, [60, 65], [320, 285]), _a[_types.MinigameType.RED_BUTTON] = new _red_button.default(this, [1070, 545], [80, 80]), _a[_types.MinigameType.STATUS] = new _status.default(this, [900, 60], [310, 460]), _a);
+    this.shield_activation = 0;
     this.minigames[_types.MinigameType.VERTEX_COUNT_REAL].booting = false;
     this.minigames[_types.MinigameType.RED_BUTTON].booting = false;
     document.addEventListener('keydown', this.process_keypress.bind(this));
@@ -81710,6 +81736,9 @@ function () {
             volume: 0.5
           });
         }, 100);
+        setTimeout(function () {
+          _this.shield_activation = 100;
+        }, 100);
         break;
 
       case 1:
@@ -81733,6 +81762,9 @@ function () {
             rate: 1.3,
             volume: 0.5
           });
+        }, 1000);
+        setTimeout(function () {
+          _this.shield_activation = 100;
         }, 1000);
         break;
 
@@ -81763,6 +81795,9 @@ function () {
             pan: 1,
             volume: 0.5
           });
+        }, 450);
+        setTimeout(function () {
+          _this.shield_activation = 100;
         }, 450);
         break;
     }
@@ -81831,7 +81866,7 @@ function () {
   Game.prototype.update = function (dt) {
     this.total_time += dt;
     this.update_difficulty();
-    this.ambientAudio();
+    this.shield_activation = Math.max(0, this.shield_activation - dt * 100);
 
     if (this.lives <= 0) {
       this.lost = true;
@@ -81864,28 +81899,34 @@ function () {
     this.stage.position.y += (Math.random() - (0.5 + far_y * this.correction_dampening)) * this.shaking_distance;
 
     if (this.lost) {
-      this.audio.playSong(_audio.Song.DEAD);
+      if (!this.over_song) {
+        this.audio.playSong(_audio.Song.GAME_OVER);
+        this.over_song = true;
+      }
+
       this.minigames[_types.MinigameType.JIGSAW_PUZZLE].sprite.rotation = 0.5 + Math.cos(this.total_time) * 0.1;
       this.minigames[_types.MinigameType.VERTEX_COUNT_REAL].sprite.rotation = 0.5 + Math.cos(this.total_time + 4) * 0.1;
       this.minigames[_types.MinigameType.VERTEX_COUNT].sprite.rotation = 0.5 + Math.cos(this.total_time + 10) * 0.1;
       this.minigames[_types.MinigameType.SIMON_SAYS].sprite.rotation = 0.5 + Math.cos(this.total_time + 7) * 0.1;
-    }
+    } else {
+      this.ambientAudio();
 
-    this.minigames[_types.MinigameType.JIGSAW_PUZZLE].update(dt);
+      this.minigames[_types.MinigameType.JIGSAW_PUZZLE].update(dt);
 
-    this.minigames[_types.MinigameType.VERTEX_COUNT].update(dt);
+      this.minigames[_types.MinigameType.VERTEX_COUNT].update(dt);
 
-    this.minigames[_types.MinigameType.VERTEX_COUNT_REAL].update(dt);
+      this.minigames[_types.MinigameType.VERTEX_COUNT_REAL].update(dt);
 
-    this.minigames[_types.MinigameType.SIMON_SAYS].update(dt);
+      this.minigames[_types.MinigameType.SIMON_SAYS].update(dt);
 
-    this.minigames[_types.MinigameType.RED_BUTTON].update(dt);
+      this.minigames[_types.MinigameType.RED_BUTTON].update(dt);
 
-    this.minigames[_types.MinigameType.STATUS].update(dt);
+      this.minigames[_types.MinigameType.STATUS].update(dt);
 
-    if (this.time_until_next_minigame <= 0) {
-      this.time_until_next_minigame = this.time_between_minigames;
-      this.spawn_minigame();
+      if (this.time_until_next_minigame <= 0) {
+        this.time_until_next_minigame = this.time_between_minigames;
+        this.spawn_minigame();
+      }
     }
   };
 
@@ -81904,6 +81945,19 @@ function () {
   };
 
   Game.prototype.draw = function () {
+    if (this.lost) {
+      var text_style = new PIXI.TextStyle({
+        fontFamily: 'Commodore',
+        fontSize: 26,
+        fill: '#ffb72a',
+        wordWrap: true,
+        wordWrapWidth: 440
+      });
+      var text = new PIXI.Text("GAME OVER", text_style);
+      text.position.set(1280 / 2 - 50, 720 / 2 - 10);
+      this.stage.addChild(text);
+    }
+
     this.minigames[_types.MinigameType.JIGSAW_PUZZLE].draw();
 
     this.minigames[_types.MinigameType.VERTEX_COUNT].draw();
@@ -82294,7 +82348,7 @@ function (_super) {
     }, _react.default.createElement(_Repair.default, null)), _react.default.createElement(_Toggle.default, {
       open: isOpen.about,
       className: "App-component__view App-component__view--about"
-    }, _react.default.createElement("h1", null, "The dudes"), _react.default.createElement("p", null, "Aslo"), _react.default.createElement("p", null, "Marcelino"), _react.default.createElement("p", null, "Lali cama"), _react.default.createElement("p", null, "Veuske"))));
+    }, _react.default.createElement("h1", null, "The dudes"), _react.default.createElement("p", null, "Aslo"), _react.default.createElement("p", null, "Marcelino"), _react.default.createElement("p", null, "Lali"), _react.default.createElement("p", null, "Veuskemini"))));
   };
 
   App.prototype.renderAudioTestBed = function () {
@@ -82317,15 +82371,20 @@ function (_super) {
   };
 
   App.prototype.render = function () {
-    return _react.default.createElement("div", {
-      className: "App-component"
-    }, _react.default.createElement("div", {
-      className: "App-component__view-container"
-    }, _react.default.createElement("div", {
-      className: "App-component__view"
-    }, _react.default.createElement(_AppContext.AppContext.Provider, {
-      value: this.contextImp()
-    }, _react.default.createElement(_Repair.default, null)))));
+    /*
+    return (
+        <div className="App-component">
+            <div className="App-component__view-container">
+                <div className="App-component__view">
+                    <AppContext.Provider value={this.contextImp()}>
+                         <Repair />
+                         { /*this.renderAudioTestBed()
+                    </AppContext.Provider>
+                </div>
+            </div>
+        </div>
+    )
+    */
     return _react.default.createElement("div", {
       className: "App-component"
     }, this.renderViewElement());
@@ -82363,7 +82422,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "32807" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38839" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -28,6 +28,8 @@ export default class Game {
 
     audio: Audio
 
+    end_boot_score = 0
+
     constructor(canvas, audio) {
 	this.audio = audio
 	// TODO: if calling before menu song is playing, the menu song will override this song.
@@ -61,6 +63,8 @@ export default class Game {
 
 	this.over_song = false
 	this.keys = {}
+
+	this.score = 0
 
 	this.minigames = {
 	    [MinigameType.JIGSAW_PUZZLE]: new JigsawPuzzle(this, [440, 430], [390, 180]),
@@ -175,6 +179,8 @@ export default class Game {
 
 	if (!this.booting) {
 	    this.time_until_next_minigame -= dt
+	    const true_score = this.total_time - this.end_boot_score
+	    this.score =Math.floor(true_score)
 	}
 
 	if (this.alarm_mode) {
@@ -261,6 +267,7 @@ export default class Game {
     }
 
     booting_end() {
+    	this.end_boot_score = this.total_time
 	this.alarm_mode = false
 	this.booting = false
 	this.background.tint += 0x000000

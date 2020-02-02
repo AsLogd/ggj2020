@@ -61,6 +61,7 @@ export default class RedButton extends Screen {
 		
 		if(key === Key.Enter){
 			console.log("+1 life")
+			this.game.score += 300
 			this.game.winLife()
 			this.game.audio.playEffect(Effect.BEEP_RESTORE)
 			this.really_activated = false

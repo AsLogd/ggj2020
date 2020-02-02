@@ -163,6 +163,7 @@ export class VertexReal extends Screen {
 
 	if (!this.deactivated) {
 	    if (num === cenemies) {
+	    	this.game.score += 700
 		this.deactivated = true
 	    }
 	    else {

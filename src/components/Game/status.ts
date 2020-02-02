@@ -110,10 +110,28 @@ export  default class Status extends Screen {
 
 	}
 
+	draw_score(stage){
+		const w = this.size[0]
+		const h = this.size[1]
+		const text_style = new PIXI.TextStyle({
+		    fontFamily: 'Commodore',
+		    fontSize: 26,
+		    fill: '#ffb72a',
+		    wordWrap: true,
+		    wordWrapWidth: 440,
+		    align: "left"
+		});
+	    const text = new PIXI.Text(this.game.score, text_style)
+	    text.position.set(100, h-50 )
+	    stage.addChild(text)
+
+	}
+
 	draw_game() {
 		const stage = new PIXI.Container()
 
 		this.draw_ship(stage)
+		this.draw_score(stage)
 
 		this.game.renderer.render(stage, this.texture, false)
 	}

@@ -298,6 +298,7 @@ export default class SimonSays extends Screen {
 			this.text.alpha = 1
 			this.text.style = {fill: "green"}
 			this.win = true
+			this.game.score += 500
 			this.state = SimonState.POST
 			this.game.audio.playEffect(Effect.BEEP_RESTORE)
 

@@ -80699,6 +80699,7 @@ function (_super) {
       }
     }
 
+    this.game.score += 1000;
     this.deactivated = true;
   };
 
@@ -80871,6 +80872,7 @@ function (_super) {
 
     if (key === _types.Key.Enter) {
       console.log("+1 life");
+      this.game.score += 300;
       this.game.winLife();
       this.game.audio.playEffect(_audio.Effect.BEEP_RESTORE);
       this.really_activated = false;
@@ -81199,6 +81201,7 @@ function (_super) {
         fill: "green"
       };
       this.win = true;
+      this.game.score += 500;
       this.state = SimonState.POST;
       this.game.audio.playEffect(_audio.Effect.BEEP_RESTORE);
     }
@@ -81357,9 +81360,26 @@ function (_super) {
     stage.addChild(this.create_triangle(3, shipPosition[0] - partSize, shipPosition[1] - partSize, partSize, 0));
   };
 
+  Status.prototype.draw_score = function (stage) {
+    var w = this.size[0];
+    var h = this.size[1];
+    var text_style = new PIXI.TextStyle({
+      fontFamily: 'Commodore',
+      fontSize: 26,
+      fill: '#ffb72a',
+      wordWrap: true,
+      wordWrapWidth: 440,
+      align: "left"
+    });
+    var text = new PIXI.Text(this.game.score, text_style);
+    text.position.set(100, h - 50);
+    stage.addChild(text);
+  };
+
   Status.prototype.draw_game = function () {
     var stage = new PIXI.Container();
     this.draw_ship(stage);
+    this.draw_score(stage);
     this.game.renderer.render(stage, this.texture, false);
   };
 
@@ -81605,6 +81625,7 @@ function (_super) {
 
     if (!this.deactivated) {
       if (num === cenemies) {
+        this.game.score += 700;
         this.deactivated = true;
       } else {
         this.game.loseLife();
@@ -81655,6 +81676,7 @@ function () {
   function Game(canvas, audio) {
     var _a;
 
+    this.end_boot_score = 0;
     this.audio = audio; // TODO: if calling before menu song is playing, the menu song will override this song.
     // remove setTimeout when menu is rendred. Maybe wait for audio to be loaded and decoded before starting the game
     //setTimeout(() => {
@@ -81683,6 +81705,7 @@ function () {
     this.lives = 4;
     this.over_song = false;
     this.keys = {};
+    this.score = 0;
     this.minigames = (_a = {}, _a[_types.MinigameType.JIGSAW_PUZZLE] = new _jigsaw.default(this, [440, 430], [390, 180]), _a[_types.MinigameType.VERTEX_COUNT] = new _vertex.default(this, [440, 65], [390, 245]), _a[_types.MinigameType.SIMON_SAYS] = new _simon.default(this, [60, 510], [320, 110]), _a[_types.MinigameType.VERTEX_COUNT_REAL] = new _vertex.VertexReal(this, [60, 65], [320, 285]), _a[_types.MinigameType.RED_BUTTON] = new _red_button.default(this, [1070, 545], [80, 80]), _a[_types.MinigameType.STATUS] = new _status.default(this, [900, 60], [310, 460]), _a);
     this.shield_activation = 0;
     this.minigames[_types.MinigameType.VERTEX_COUNT_REAL].booting = false;
@@ -81880,6 +81903,8 @@ function () {
 
     if (!this.booting) {
       this.time_until_next_minigame -= dt;
+      var true_score = this.total_time - this.end_boot_score;
+      this.score = Math.floor(true_score);
     }
 
     if (this.alarm_mode) {
@@ -81974,6 +81999,7 @@ function () {
   };
 
   Game.prototype.booting_end = function () {
+    this.end_boot_score = this.total_time;
     this.alarm_mode = false;
     this.booting = false;
     this.background.tint += 0x000000;

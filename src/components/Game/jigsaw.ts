@@ -97,7 +97,7 @@ export default class JigsawPuzzle extends Screen {
 	    }
 	}
 
-
+	this.game.score += 1000
 	this.deactivated = true
     }
 

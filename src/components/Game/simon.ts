@@ -254,7 +254,20 @@ export default class SimonSays extends Screen {
 	}
 
 	handleEvent(key: Key) {
-		this.game.audio.playEffect(Effect.BEEP_RESTORE)
+		switch(key){
+			case Key.A:
+				this.game.audio.playEffect(Effect.SIMON_A)
+				break;
+			case Key.S:
+				this.game.audio.playEffect(Effect.SIMON_B)
+				break;
+			case Key.D:
+				this.game.audio.playEffect(Effect.SIMON_C)
+				break;
+			case Key.W:
+				this.game.audio.playEffect(Effect.SIMON_D)
+				break;
+		}
 		this.key_activation[key] = this.key_max_activation
 	}
 

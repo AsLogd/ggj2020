@@ -81,6 +81,30 @@ class App extends React.Component<{}, AppState> {
 		)
 	}
 
+	handleEffectClick = (effect: Effect) => () => {
+		return(
+			this.audio.playEffect(effect)
+		)
+	}
+
+	renderAudioTestBed() {
+		const effects : any= []
+		for( const val in Effect) {
+			effects.push(val)
+		}
+		return(
+			<div className="effects-testbed">
+				{
+					effects.map(effect => 
+						<div className="effect" onClick={this.handleEffectClick(effect)}>
+							{"a"+effect}
+						</div>	
+					)
+				}
+			</div>
+		)
+	}
+
 	render() {
 		
 		return (
@@ -90,6 +114,8 @@ class App extends React.Component<{}, AppState> {
 						<AppContext.Provider value={this.contextImp()}>
 
 							<Repair />
+
+							{ /*this.renderAudioTestBed()*/ }
 						</AppContext.Provider>
 					</div>
 				</div>

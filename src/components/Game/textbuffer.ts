@@ -24,6 +24,10 @@ export class TextBuffer {
 	}
     }
 
+    clear() {
+	this.buffer = []
+    }
+
     addStatus(status: string) {
 	const line = this.buffer[this.buffer.length - 1].text;
 	const line_len = line.length

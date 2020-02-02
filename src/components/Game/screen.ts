@@ -6,7 +6,37 @@ import { TextBuffer } from "./textbuffer.ts"
 import {CRTFilter} from '@pixi/filter-crt';
 import {GlowFilter} from '@pixi/filter-glow';
 
+// First, checks if it isn't implemented yet.
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined'
+            ? args[number].toFixed(2)
+            : match
+      ;
+    });
+  };
+}
 
+function format_hit(str) {
+    const db = -1 * (Math.random() * 35)
+    const p = Math.random()
+
+    return str.format(db, p)
+}
+
+function format_angle(str) {
+    const angle = -1 * Math.random() * 1.5
+
+    return str.format(angle)
+}
+
+function format_capacitor(str) {
+    const cap = Math.floor(Math.random() * 5000)
+
+    return str.format(cap)
+}
 
 export default class Screen {
     deactivated: boolean;
@@ -83,6 +113,25 @@ export default class Screen {
 	]
     }
 
+    SUBSYSTEM_SENTENCES = {
+	[MinigameType.JIGSAW_PUZZLE]: [
+	    {text: "HIT: {0} dB {1}P", formatfn: format_hit},
+	    {text: "LAR: {0}rad", formatfn: format_angle},
+	    {text: "> ACK"},
+	    {text: "< ALOH"},
+	    {text: "DEC -> {0} <- {1}", formatfn: format_hit},
+	    {text: "Capacitor #{0} Depleted", formatfn: format_capacitor}
+	],
+	[MinigameType.VERTEX_COUNT]: [
+	    {text: "HIT: {0} dB {1}P", formatfn: format_hit},
+	    {text: "LAR: {0}rad", formatfn: format_angle},
+	    {text: "> ACK"},
+	    {text: "< ALOH"},
+	    {text: "DEC -> {0} <- {1}", formatfn: format_hit},
+	    {text: "Capacitor #{0} Depleted", formatfn: format_capacitor}
+	],
+    }
+
     constructor(game, pos, size, minigametype, keys) {
 	this.booting = true
 
@@ -96,6 +145,9 @@ export default class Screen {
 	this.sprite = PIXI.Sprite.from(this.texture)
 	this.sprite.position = { x: pos[0], y: pos[1] }
 	this.sprite.filters = [new GlowFilter()]
+
+	this.time_until_new_sentence = 0.2
+	this.next_sentence_in = 0.2
 
 	this.game.stage.addChild(this.sprite)
 
@@ -229,6 +281,27 @@ export default class Screen {
 		}
 
 	    }
+	}
+	else {
+	    if (this.next_sentence_in <= 0) {
+		if (this.SUBSYSTEM_SENTENCES[this.type]) {
+		    const len = this.SUBSYSTEM_SENTENCES[this.type].length
+		    const choose = Math.floor(Math.random() * len)
+		    const sent = this.SUBSYSTEM_SENTENCES[this.type][choose]
+
+		    if (sent.formatfn) {
+			this.screen_tb.addLine(sent.formatfn(sent.text))
+		    }
+		    else {
+			this.screen_tb.addLine(sent.text)
+		    }
+
+		}
+
+		this.next_sentence_in = this.time_until_new_sentence + (Math.random() - 0.5) * 0.05
+	    }
+
+	    this.next_sentence_in -= 0.016
 	}
 
 	if (!skip_render) {

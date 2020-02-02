@@ -40,6 +40,9 @@ export default class Game {
 	    return Math.random() < 0.5
 	})
 
+	this.correction_dampening = 0.7
+	this.shaking_distance = 2.5
+
 	this.background = PIXI.Sprite.from(background_image)
 	this.background.tint = 0x666666
 	this.stage.addChild(this.background)
@@ -81,13 +84,15 @@ export default class Game {
 	this.total_time += dt
 	this.update_difficulty()
 
-	this.time_until_next_minigame -= dt
+	if (!this.booting) {
+	    this.time_until_next_minigame -= dt
+	}
 
 	if (this.alarm_mode) {
 	    this.background.tint = (Math.cos(this.total_time * 4) * 0x66 + 0x66) << 16
 	}
 	else {
-	    if (this.background.tint < 0x666666) {
+	    if (this.background.tint <  0x666666) {
 		this.background.tint += 0x010101
 	    } else {
 		this.background.tint = 0x666666
@@ -98,8 +103,8 @@ export default class Game {
 	const far_x = this.stage.position.x - 0
 	const far_y = this.stage.position.y - 0
 
-	this.stage.position.x += (Math.random() - (0.5 + far_x * 0.1)) * 2.5
-	this.stage.position.y += (Math.random() - (0.5 + far_y * 0.1)) * 2.5
+	this.stage.position.x += (Math.random() - (0.5 + far_x * this.correction_dampening)) * this.shaking_distance
+	this.stage.position.y += (Math.random() - (0.5 + far_y * this.correction_dampening)) * this.shaking_distance
 
 	this.minigames[MinigameType.JIGSAW_PUZZLE].update(dt)
 
@@ -130,6 +135,8 @@ export default class Game {
 	this.alarm_mode = false
 	this.booting = false
 	this.background.tint += 0x000000
+	this.correction_dampening = 0.1
+	this.shaking_distance = 2.5
     }
 
     spawn_minigame() {
@@ -151,7 +158,7 @@ export default class Game {
 	const random_type = non_running_minigames[random_type_idx]
 	const random_type_name = MinigameType[random_type]
 
-	// this.minigames[random_type_name].activate(3)
+//	this.minigames[random_type_name].activate(3)
     }
 
     update_difficulty() {

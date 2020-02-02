@@ -1,4 +1,7 @@
 import * as PIXI from "pixi.js"
+
+import * as Util from "misc/Util"
+
 import Screen from "./screen"
 import { Key, MinigameType } from "./types"
 
@@ -84,6 +87,16 @@ export  default class Status extends Screen {
 		const margin = 5
 		const shipPosition = [w/2+partSize/2, h/2+partSize]
 
+	  	var shield = new PIXI.Graphics();
+	  	shield.lineStyle(4, 0xAAAAFF, 1);
+	  	shield.drawCircle(shipPosition[0]-partSize/2, shipPosition[1]-partSize, 130)
+	  	shield.endFill()
+	  	shield.alpha = Util.mapRange(
+	  		this.game.shield_activation
+	  		0, 100,
+	  		0, 1
+	  	)
+	  	stage.addChild(shield)
 		//top
 		stage.addChild(this.create_triangle(0,shipPosition[0], shipPosition[1]-partSize-margin/2, partSize, 180))
 		//left
@@ -92,6 +105,9 @@ export  default class Status extends Screen {
 		stage.addChild(this.create_triangle(2,shipPosition[0]+partSize/2+margin/2, shipPosition[1], partSize, 180))
 		//center
 		stage.addChild(this.create_triangle(3,shipPosition[0]-partSize, shipPosition[1]-partSize, partSize, 0))
+
+
+
 	}
 
 	draw_game() {

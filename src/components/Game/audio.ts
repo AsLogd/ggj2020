@@ -3,7 +3,8 @@ import {Howl, Howler} from "howler"
 export enum Song {
 	MENU = "MENU",
 	PLAYING ="PLAYING",
-	DEAD = "DEAD"
+	DEAD = "DEAD",
+	GAME_OVER = "GAME_OVER"
 }
 
 export enum Effect {
@@ -62,7 +63,8 @@ const effectData: {[t in Effect]: [number, number]} = {
 const songFileUrls = {
 	[Song.MENU]: require("../../../public/audio/pixel_nemesis.ogg"),
 	[Song.PLAYING]: require("../../../public/audio/subliminal_interpolation.ogg"),
-	[Song.DEAD]: require("../../../public/audio/energetic_breakdown.ogg")
+	[Song.DEAD]: require("../../../public/audio/energetic_breakdown.ogg"),
+	[Song.GAME_OVER]: require("../../../public/audio/gameover.ogg"),
 }
 
 const effectSpriteSoundUrl = require("../../../public/audio/FX_File_ext.ogg")
@@ -103,6 +105,7 @@ export default class Audio {
 	playSong(song: Song) {
 		this.songs.map(s => s.stop())
 		this.songsDict[song].play()
+		console.log(this.songsDict, song)
 	}
 
 	playEffect(effect: Effect, opt?: AudioOptions) {

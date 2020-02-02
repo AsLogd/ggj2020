@@ -107,16 +107,17 @@ export default class JigsawPuzzle extends Screen {
 		const x = j * tw + margin
 		const y = i * th + margin
 
-		const uv_x = (idx % 3) * tw
-		const uv_y = (Math.floor(idx / 3)) * th
+		const text_w = this.puzzle_sprite.texture.width / 3
+		const text_h = this.puzzle_sprite.texture.height / 3
+
+		const uv_x = (idx % 3) * text_w
+		const uv_y = (Math.floor(idx / 3)) * text_h
 
 		this.puzzle_sprite.width = tw
 		this.puzzle_sprite.height = th
 		this.puzzle_sprite.position.x = x
 		this.puzzle_sprite.position.y = y
-		const text_w = this.puzzle_sprite.texture.width / 3
-		const text_h = this.puzzle_sprite.texture.height / 3
-		this.puzzle_sprite.texture.frame = new PIXI.Rectangle(uv_x, uv_y, text_w, text_h)
+		this.puzzle_sprite.texture.frame = new PIXI.Rectangle(uv_x, uv_y, tw, th)
 
 		this.game.renderer.render(this.puzzle_sprite, this.texture, false)
 		draw_count += 1

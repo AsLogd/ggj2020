@@ -7,8 +7,10 @@
 	"license": "MIT",
 	"private": true,
 	"dependencies": {
+		"@pixi/filter-bloom": "^3.0.3",
 		"@pixi/filter-crt": "^3.0.3",
 		"@pixi/filter-glitch": "^3.0.3",
+		"@pixi/filter-glow": "^3.0.3",
 		"@types/howler": "^2.1.2",
 		"@types/keypress": "^2.0.30",
 		"@types/matter-js": "^0.10.9",

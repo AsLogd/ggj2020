@@ -3,6 +3,7 @@ export enum Key {
     Down = "ArrowDown",
     Left = "ArrowLeft",
     Right = "ArrowRight",
+    Enter = "Enter",
     W = "w",
     S = "s",
     D = "d",
@@ -15,6 +16,7 @@ export enum MinigameType {
     JIGSAW_PUZZLE = "Jigsaw Puzzle",
     VERTEX_COUNT = "Vertex Count",
     VERTEX_COUNT_REAL = "Vertex Count Real",
+    RED_BUTTON = "Red button",
 }
 
 export const type_exclude = [MinigameType.VERTEX_COUNT]

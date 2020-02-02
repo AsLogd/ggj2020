@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js"
 import Audio, {Song, Effect} from "./audio"
 import Screen from "./screen"
 import JigsawPuzzle from "./jigsaw"
+import RedButton from "./red_button"
 import SimonSays from "./simon"
 import VertexPuzzle, {VertexReal} from "./vertex"
 import { MinigameType } from "./types"
@@ -63,9 +64,11 @@ export default class Game {
 	    [MinigameType.VERTEX_COUNT]: new VertexPuzzle(this, [440, 65], [390, 245]),
 	    [MinigameType.SIMON_SAYS]: new SimonSays(this, [60, 510], [320, 110]),
 	    [MinigameType.VERTEX_COUNT_REAL]: new VertexReal(this, [60, 65], [320, 285]),
+	    [MinigameType.RED_BUTTON]: new RedButton(this, [970, 545], [80, 80]),
 	}
 
 	this.minigames[MinigameType.VERTEX_COUNT_REAL].booting = false
+	this.minigames[MinigameType.RED_BUTTON].booting = false
 
 	document.addEventListener('keydown', this.process_keypress.bind(this))
 
@@ -85,6 +88,10 @@ export default class Game {
 
     loseLife() {
 	this.lives -= 1
+    }
+
+    winLife() {
+	this.lives += 1
     }
 
     ambientAudio() {
@@ -167,6 +174,7 @@ export default class Game {
 	this.stage.position.y += (Math.random() - (0.5 + far_y * this.correction_dampening)) * this.shaking_distance 
 
 	if (this.lost) {
+		this.audio.playSong(Song.DEAD)
 	    this.minigames[MinigameType.JIGSAW_PUZZLE].sprite.rotation = 0.5 + Math.cos(this.total_time) * 0.1
 	    this.minigames[MinigameType.VERTEX_COUNT_REAL].sprite.rotation = 0.5 + Math.cos(this.total_time + 4) * 0.1
 	    this.minigames[MinigameType.VERTEX_COUNT].sprite.rotation = 0.5 + Math.cos(this.total_time + 10) * 0.1
@@ -177,6 +185,7 @@ export default class Game {
 	this.minigames[MinigameType.VERTEX_COUNT].update(dt)
 	this.minigames[MinigameType.VERTEX_COUNT_REAL].update(dt)
 	this.minigames[MinigameType.SIMON_SAYS].update(dt)
+	this.minigames[MinigameType.RED_BUTTON].update(dt)
 
 	if (this.time_until_next_minigame <= 0) {
 	    this.time_until_next_minigame = this.time_between_minigames
@@ -199,6 +208,7 @@ export default class Game {
 	this.minigames[MinigameType.VERTEX_COUNT].draw()
 	this.minigames[MinigameType.VERTEX_COUNT_REAL].draw()
 	this.minigames[MinigameType.SIMON_SAYS].draw()
+	this.minigames[MinigameType.RED_BUTTON].draw()
 
 	this.renderer.render(this.stage)
     }
@@ -220,6 +230,9 @@ export default class Game {
 	    }
 	}
 
+	//Jinch
+	non_running_minigames.push("RED_BUTTON")
+
 	const num_nrm = non_running_minigames.length
 
 	if (num_nrm === 0) {
@@ -229,6 +242,7 @@ export default class Game {
 	const random_type_idx = Math.floor(Math.random() * num_nrm)
 	const random_type = non_running_minigames[random_type_idx]
 	const random_type_name = MinigameType[random_type]
+
 
 	this.minigames[random_type_name].activate(3)
 	this.playImpactEffect()

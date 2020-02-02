@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js"
 import Audio, {Song} from "./audio"
 import Screen from "./screen"
 import JigsawPuzzle from "./jigsaw"
+import VertexPuzzle from "./vertex"
 import { MinigameType } from "./types"
 
 import { background_image } from "./assets"
@@ -40,6 +41,7 @@ export default class Game {
 	})
 
 	this.background = PIXI.Sprite.from(background_image)
+	this.background.tint = 0x666666
 	this.stage.addChild(this.background)
 
 	this.time_between_minigames = 3
@@ -49,11 +51,10 @@ export default class Game {
 	this.keys = {}
 
 	this.minigames = {
-	    [MinigameType.JIGSAW_PUZZLE]: new JigsawPuzzle(this, [440, 430], [400, 180]),
-	    [MinigameType.VERTEX_COUNT]: new JigsawPuzzle(this, [440, 60], [400, 240]),
+	    [MinigameType.JIGSAW_PUZZLE]: new JigsawPuzzle(this, [440, 430], [390, 180]),
+	    [MinigameType.VERTEX_COUNT]: new VertexPuzzle(this, [440, 65], [390, 245]),
 	    [MinigameType.SIMON_SAYS]: new JigsawPuzzle(this, [150, 400], [200, 200]),
 	}
-
 
 	const texture = this.minigames[MinigameType.JIGSAW_PUZZLE].texture
 	this.one_screen = PIXI.Sprite.from(texture)
@@ -128,7 +129,7 @@ export default class Game {
 	const random_type = non_running_minigames[random_type_idx]
 	const random_type_name = MinigameType[random_type]
 
-	this.minigames[random_type_name].activate(3)
+	// this.minigames[random_type_name].activate(3)
     }
 
     update_difficulty() {

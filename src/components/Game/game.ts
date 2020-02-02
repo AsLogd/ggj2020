@@ -87,12 +87,61 @@ export default class Game {
 	this.lives -= 1
     }
 
+    ambientAudio() {
+    	const c = Math.floor(Math.random()*350)
+    	switch(c)
+    	{
+    		case 0:
+    			this.audio.playEffect(Effect.LASER_BEAM, {pan:-1})
+    			setTimeout(() => { this.audio.playEffect(Effect.FADED_BEEP, {pan: -0.8, rate: 0.8, volume:0.5})}, 100)
+    			break
+    		case 1:
+				setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan:0.2, rate: 1.5, volume:0.5})}, 100)
+    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0.7, rate: 1.3, volume:0.3})}, 1000)
+    			setTimeout(() => { this.audio.playEffect(Effect.FADED_BEEP, {pan:1, rate:1.3,volume:0.5})}, 1000)
+    			break
+    		case 1:
+				setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan:0.2, rate: 1.5, volume:0.5})}, 100)
+    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0.7, rate: 1.2, volume:0.6})}, 200)
+    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0.7, rate: 0.9, volume:0.7})}, 400)
+    			setTimeout(() => { this.audio.playEffect(Effect.FADED_BEEP, {pan:1,volume:0.5})}, 450)
+    			break
+    	}
+    	if(this.lives <= 2) {
+    		const c2 = Math.floor(Math.random()*300)
+	    	switch(c2)
+	    	{
+	    		case 0:
+	    			this.audio.playEffect(Effect.RESENTING_HULL, {pan:-1, rate: 0.6, volume:0.4})
+	    			setTimeout(() => { this.audio.playEffect(Effect.RESENTING_HULL, {pan:0.8, volume:0.3, rate:0.2})}, 1000)
+	    			break
+	    		case 1:
+	    			this.audio.playEffect(Effect.RESENTING_HULL, {pan:1, rate: 0.3, volume:0.4})
+	    			setTimeout(() => { this.audio.playEffect(Effect.RESENTING_HULL, {pan:-0.8, volume:0.2, rate:0.5})}, 1000)
+	    			break
+	    		case 2:
+					setTimeout(() => { this.audio.playEffect(Effect.PIXEL_EXPLOSION, {volume:0.3})}, 100)
+	    			setTimeout(() => { this.audio.playEffect(Effect.PIXEL_EXPLOSION, {volume:0.3})}, 200)
+	    			setTimeout(() => { this.audio.playEffect(Effect.PIXEL_EXPLOSION, {volume:0.3})}, 300)
+	    			break
+	    		case 3:
+	    			this.audio.playEffect(Effect.LONG_BEEP, {volume:0.5})
+	    			break
+	    	}	
+    	}
+    }
+
     update(dt) {
 	this.total_time += dt
 	this.update_difficulty()
 
+	this.ambientAudio()
+
 	if (this.lives <= 0) {
 	    this.lost = true
+	}
+	if(this.lives === 1){
+		this.alarm_mode = true
 	}
 
 	if (!this.booting) {
@@ -114,8 +163,8 @@ export default class Game {
 	const far_x = this.stage.position.x - 0
 	const far_y = this.stage.position.y - 0
 
-	this.stage.position.x += (Math.random() - (0.5 + far_x * this.correction_dampening)) * this.shaking_distance
-	this.stage.position.y += (Math.random() - (0.5 + far_y * this.correction_dampening)) * this.shaking_distance
+	this.stage.position.x += (Math.random() - (0.5 + far_x * this.correction_dampening)) * this.shaking_distance 
+	this.stage.position.y += (Math.random() - (0.5 + far_y * this.correction_dampening)) * this.shaking_distance 
 
 	if (this.lost) {
 	    this.minigames[MinigameType.JIGSAW_PUZZLE].sprite.rotation = 0.5 + Math.cos(this.total_time) * 0.1
@@ -131,7 +180,7 @@ export default class Game {
 
 	if (this.time_until_next_minigame <= 0) {
 	    this.time_until_next_minigame = this.time_between_minigames
-	    // this.spawn_minigame()
+	    this.spawn_minigame()
 	}
     }
 
@@ -190,25 +239,25 @@ export default class Game {
     	switch(c)
     	{
     		case 0:
-    			this.audio.playEffect(Effect.BULLET_IMPACT)
-    			setTimeout(() => { this.audio.playEffect(Effect.EXPLOSION)}, 500)
+    			this.audio.playEffect(Effect.BULLET_IMPACT,{volume:0.3, rate: 1.1})
+    			setTimeout(() => this.audio.playEffect(Effect.BULLET_IMPACT,{volume:0.6, rate: 1.3}), 200)
+    			setTimeout(() => this.audio.playEffect(Effect.BULLET_IMPACT,{rate: 1.5}), 300)
+    			setTimeout(() => { this.audio.playEffect(Effect.EXPLOSION)}, 400)
     			break
     		case 1:
     			this.audio.playEffect(Effect.IMPACT_EXPLOSION, {pan: -0.5})
     			setTimeout(() => { this.audio.playEffect(Effect.RESENTING_HULL, {pan: -1})}, 100)
     			break
     		case 2:
-    			this.audio.playEffect(Effect.LASER_BEAM)
-    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan:-1})}, 300)
-    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: -0.8})}, 500)
+    			this.audio.playEffect(Effect.LASER_BEAM, {pan:-1})
+    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan:-1, volume: 0.3})}, 300)
+    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: -0.8, volume: 0.5})}, 500)
     			setTimeout(() => { this.audio.playEffect(Effect.DEEP_EXPLOSION, {pan: -0.3})}, 500)
     			setTimeout(() => { this.audio.playEffect(Effect.EXPLOSION, {pan: 0})}, 800)
-    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: -0.3})}, 900)
-    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: -0.1})}, 1500)
-    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0})}, 2000)
     			break
     		case 3:
-    			this.audio.playEffect(Effect.IMPACT_EXPLOSION, {pan: 0.6})
+    			this.audio.playEffect(Effect.BULLET_IMPACT,{volume:0.3, rate: 1.1, pan: 0.4})
+    			setTimeout(() => { this.audio.playEffect(Effect.IMPACT_EXPLOSION, {pan: 0.6})}, 300)
     			setTimeout(() => { this.audio.playEffect(Effect.DESTRUCTION, {pan: 0.7})}, 300)
     			setTimeout(() => { this.audio.playEffect(Effect.RESENTING_HULL, {pan: 1})}, 1000)
     			break
@@ -216,6 +265,8 @@ export default class Game {
     			this.audio.playEffect(Effect.BULLET_IMPACT, {pan: -0.5})
     			setTimeout(() => { this.audio.playEffect(Effect.BULLET_IMPACT, {pan: 0.5})}, 200)
     			setTimeout(() => { this.audio.playEffect(Effect.DESTRUCTION, {pan: 0.7})}, 300)
+    			setTimeout(() => { this.audio.playEffect(Effect.RESENTING_HULL, {rate: 1.5})}, 400)
+
     			break
     	}
     }

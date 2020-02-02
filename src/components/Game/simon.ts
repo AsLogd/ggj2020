@@ -38,7 +38,7 @@ export default class SimonSays extends Screen {
 
 	win: boolean = false
 
-
+	text: PIXI.Text
 
 	key_activation = {
 		[Key.A]: 30,
@@ -51,10 +51,10 @@ export default class SimonSays extends Screen {
 	key_min_activation = 30
 
 	constructor(game, pos, size) {
-		const keys = [Key.A, Key.S, Key.D, Key.W] 
-		super(game, pos, size, MinigameType.SIMON_SAYS, keys)
-		this.keys = keys
+		super(game, pos, size, MinigameType.SIMON_SAYS, [Key.A, Key.S, Key.D, Key.W])
+		this.keys = [Key.A, Key.S, Key.D, Key.W]
 		this.state = SimonState.PRE
+		this.text = new PIXI.Text('4d4d4d4d3', this.text_style)
 	}
 
 	getRandomKey() {
@@ -69,6 +69,7 @@ export default class SimonSays extends Screen {
 			"&%¡¡%%0x0000FFFFFFFF",
 			"NaN 581037510",
 			"<[[[[[[[[[[[",
+			"4d3d3d3d3",
 			"fatal: @0x000000",
 		][i]
 	}
@@ -134,7 +135,11 @@ export default class SimonSays extends Screen {
 		//console.log("Simon: INPUT:", this.input_timeout)
 		this.input_timeout -= dt*1000
 		if(this.input_timeout < 3000){
-			this.text.style.fill = "yellow"
+			if(this.text.style.fill !== "yellow")
+			{
+				this.text.style.fill = "yellow"
+				this.game.audio.playEffect(Effect.BEEP_SEQUENCE)
+			}
 			this.text.alpha = (this.text.alpha + dt ) % 1.0
 
 		}
@@ -145,6 +150,8 @@ export default class SimonSays extends Screen {
 			this.text.style = {fill: "red"}
 			// if ends without this.win=true => lose
 			this.state = SimonState.POST
+			this.game.audio.playEffect(Effect.BEEP_LOSE)
+			this.game.loseLife()
 		}
 	}
 
@@ -251,6 +258,7 @@ export default class SimonSays extends Screen {
 		this.draw_simon(stage)
 
 		this.game.renderer.render(stage, this.texture, false)
+		this.game.renderer.render(this.text, this.texture, false)
 	}
 
 	handleEvent(key: Key) {
@@ -281,6 +289,8 @@ export default class SimonSays extends Screen {
 			this.text.alpha = 1
 			this.text.text = "CRC CHECK FAILED"
 			this.text.style = {fill: "red"}
+			this.game.loseLife()
+			this.game.audio.playEffect(Effect.DYING_BOT)
 			// ends without winning
 			this.state = SimonState.POST
 		} else if (this.sequence_input.length === 0) {
@@ -289,6 +299,8 @@ export default class SimonSays extends Screen {
 			this.text.style = {fill: "green"}
 			this.win = true
 			this.state = SimonState.POST
+			this.game.audio.playEffect(Effect.BEEP_RESTORE)
+
 		}
 
 		this.handleEvent(key)

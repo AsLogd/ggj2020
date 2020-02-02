@@ -70,6 +70,8 @@ const effectSpriteSoundUrl = require("../../../public/audio/FX_File_ext.ogg")
 interface AudioOptions {
 	pos?: [number, number, number]
 	pan?: number
+	rate?: number
+	volume?: number
 }
 
 export default class Audio {
@@ -112,6 +114,12 @@ export default class Audio {
 			}
 			if(opt.pan) {
 				this.effects.stereo(opt.pan, id)
+			}
+			if(opt.rate) {
+				this.effects.rate(opt.rate, id)
+			}
+			if(opt.volume) {
+				this.effects.volume(opt.volume, id)
 			}
 		}
 	}

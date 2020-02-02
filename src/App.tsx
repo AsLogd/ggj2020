@@ -115,7 +115,7 @@ class App extends React.Component<{}, AppState> {
 
 							<Repair />
 
-							{ this.renderAudioTestBed() }
+							{ /*this.renderAudioTestBed()*/ }
 						</AppContext.Provider>
 					</div>
 				</div>

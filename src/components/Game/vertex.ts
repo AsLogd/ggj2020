@@ -79,7 +79,7 @@ export class VertexReal extends Screen {
 	    enemy.y += dt * 15 * Math.sin(enemy.d)
 	}
 
-	this.radar_circle.rotation += 0.05
+	this.radar_circle.rotation += 0.15
     }
 
     draw_game() {

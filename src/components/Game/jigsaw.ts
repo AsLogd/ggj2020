@@ -72,6 +72,14 @@ export default class JigsawPuzzle extends Screen {
 
     update(dt: number) {
 	let curr = -1 
+
+	if (!this.deactivated) {
+	    this.timeout += dt
+	    if (this.timeout >= this.time_to_lose) {
+		this.game.loseLife()
+	    }
+	}
+
 	for (let i = 0; i < 3; ++i) {
 	    for (let j = 0; j < 3; ++j) {
 		if (i === 2 && j === 2) {
@@ -87,10 +95,6 @@ export default class JigsawPuzzle extends Screen {
 	    }
 	}
 
-	this.timeout += dt
-	if (this.timeout >= this.time_to_lose) {
-	    this.game.loseLife()
-	}
 
 	this.deactivated = true
     }
@@ -116,8 +120,8 @@ export default class JigsawPuzzle extends Screen {
 		const x = j * tw + margin
 		const y = i * th + margin
 
-		const text_w = this.puzzle_sprite.texture.width / 3
-		const text_h = this.puzzle_sprite.texture.height / 3
+		const text_w = this.puzzle_sprite.texture.baseTexture.width / 3
+		const text_h = this.puzzle_sprite.texture.baseTexture.height / 3
 
 		const uv_x = (idx % 3) * text_w
 		const uv_y = (Math.floor(idx / 3)) * text_h
@@ -126,7 +130,7 @@ export default class JigsawPuzzle extends Screen {
 		this.puzzle_sprite.height = th
 		this.puzzle_sprite.position.x = x
 		this.puzzle_sprite.position.y = y
-		this.puzzle_sprite.texture.frame = new PIXI.Rectangle(uv_x, uv_y, tw, th)
+		this.puzzle_sprite.texture.frame = new PIXI.Rectangle(uv_x, uv_y, text_w, text_h)
 
 		this.game.renderer.render(this.puzzle_sprite, this.texture, false)
 		draw_count += 1

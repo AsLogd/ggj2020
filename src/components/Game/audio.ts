@@ -3,7 +3,7 @@ import {Howl, Howler} from "howler"
 export enum Song {
 	MENU = "MENU",
 	PLAYING ="PLAYING",
-	//DEAD
+	DEAD = "DEAD"
 }
 
 export enum Effect {
@@ -26,6 +26,10 @@ export enum Effect {
 	LONG_EFFECT = "LONG_EFFECT",
 	DYING_BOT = "DYING_BOT",
 	STATIC_RADIO = "STATIC_RADIO",
+	SIMON_A = "SIMON_A",
+	SIMON_B = "SIMON_B",
+	SIMON_C = "SIMON_C",
+	SIMON_D = "SIMON_D",
 }
 
 const effectData: {[t in Effect]: [number, number]} = {
@@ -47,16 +51,21 @@ const effectData: {[t in Effect]: [number, number]} = {
 	[Effect.LASER_BEAM]: 		[17100,500],
 	[Effect.LONG_EFFECT]: 		[41100,3400],
 	[Effect.DYING_BOT]: 		[44500,1200],
-	[Effect.STATIC_RADIO]: 		[58300,300]
+	[Effect.STATIC_RADIO]: 		[58300,300],
+	[Effect.SIMON_A]:	 		[65200,1100],
+	[Effect.SIMON_B]:	 		[68600,1100],
+	[Effect.SIMON_C]:	 		[71900,1100],
+	[Effect.SIMON_D]:	 		[75400,1100],
 }
 
 //TODO: add webm audio assets
 const songFileUrls = {
 	[Song.MENU]: require("../../../public/audio/pixel_nemesis.ogg"),
-	[Song.PLAYING]: require("../../../public/audio/subliminal_interpolation.ogg")
+	[Song.PLAYING]: require("../../../public/audio/subliminal_interpolation.ogg"),
+	[Song.DEAD]: require("../../../public/audio/energetic_breakdown.ogg")
 }
 
-const effectSpriteSoundUrl = require("../../../public/audio/FX_File.ogg")
+const effectSpriteSoundUrl = require("../../../public/audio/FX_File_ext.ogg")
 
 export default class Audio {
 	songs: Howl[] = []

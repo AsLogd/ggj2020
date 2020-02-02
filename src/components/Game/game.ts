@@ -181,7 +181,7 @@ export default class Game {
 	const random_type = non_running_minigames[random_type_idx]
 	const random_type_name = MinigameType[random_type]
 
-//	this.minigames[random_type_name].activate(3)
+	this.minigames[random_type_name].activate(3)
     }
 
     update_difficulty() {

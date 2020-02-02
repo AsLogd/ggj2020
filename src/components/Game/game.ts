@@ -5,6 +5,7 @@ import Screen from "./screen"
 import JigsawPuzzle from "./jigsaw"
 import RedButton from "./red_button"
 import SimonSays from "./simon"
+import Status from "./status"
 import VertexPuzzle, {VertexReal} from "./vertex"
 import { MinigameType } from "./types"
 
@@ -55,7 +56,7 @@ export default class Game {
 
 	this.booting = true
 
-	this.lives = 5
+	this.lives = 4
 
 	this.keys = {}
 
@@ -64,7 +65,9 @@ export default class Game {
 	    [MinigameType.VERTEX_COUNT]: new VertexPuzzle(this, [440, 65], [390, 245]),
 	    [MinigameType.SIMON_SAYS]: new SimonSays(this, [60, 510], [320, 110]),
 	    [MinigameType.VERTEX_COUNT_REAL]: new VertexReal(this, [60, 65], [320, 285]),
-	    [MinigameType.RED_BUTTON]: new RedButton(this, [970, 545], [80, 80]),
+	    [MinigameType.RED_BUTTON]: new RedButton(this, [1070, 545], [80, 80]),
+	    [MinigameType.STATUS]: new Status(this, [900, 60], [310, 460]),
+
 	}
 
 	this.minigames[MinigameType.VERTEX_COUNT_REAL].booting = false
@@ -91,7 +94,7 @@ export default class Game {
     }
 
     winLife() {
-	this.lives += 1
+	this.lives = Math.min(5, this.lives+1)
     }
 
     ambientAudio() {
@@ -147,8 +150,10 @@ export default class Game {
 	if (this.lives <= 0) {
 	    this.lost = true
 	}
-	if(this.lives === 1){
+	if(this.lives < 2){
 		this.alarm_mode = true
+	} else if(!this.booting) {
+		this.alarm_mode = false
 	}
 
 	if (!this.booting) {
@@ -186,6 +191,7 @@ export default class Game {
 	this.minigames[MinigameType.VERTEX_COUNT_REAL].update(dt)
 	this.minigames[MinigameType.SIMON_SAYS].update(dt)
 	this.minigames[MinigameType.RED_BUTTON].update(dt)
+	this.minigames[MinigameType.STATUS].update(dt)
 
 	if (this.time_until_next_minigame <= 0) {
 	    this.time_until_next_minigame = this.time_between_minigames
@@ -209,6 +215,7 @@ export default class Game {
 	this.minigames[MinigameType.VERTEX_COUNT_REAL].draw()
 	this.minigames[MinigameType.SIMON_SAYS].draw()
 	this.minigames[MinigameType.RED_BUTTON].draw()
+	this.minigames[MinigameType.STATUS].draw()
 
 	this.renderer.render(this.stage)
     }

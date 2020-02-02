@@ -17,6 +17,7 @@ export enum MinigameType {
     VERTEX_COUNT = "Vertex Count",
     VERTEX_COUNT_REAL = "Vertex Count Real",
     RED_BUTTON = "Red button",
+    STATUS = "Status",
 }
 
 export const type_exclude = [MinigameType.VERTEX_COUNT]

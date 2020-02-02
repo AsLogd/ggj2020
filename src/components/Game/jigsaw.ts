@@ -67,6 +67,25 @@ export default class JigsawPuzzle extends Screen {
     }
 
     update(dt: number) {
+	let curr = -1 
+	for (let i = 0; i < 3; ++i) {
+	    for (let j = 0; j < 3; ++j) {
+		if (i === 2 && j === 2) {
+		    continue;
+		}
+
+		if (this.puzzle[i][j] === curr + 1) {
+		    curr += 1
+		}
+		else {
+		    return;
+		}
+	    }
+	}
+
+	console.log("waddup")
+
+	this.deactivated = true
     }
 
     draw_game() {
@@ -77,6 +96,9 @@ export default class JigsawPuzzle extends Screen {
 	const th = 180/3
 
 	let draw_count = 0
+	const last_bc = this.game.renderer.backgroundColor
+	this.game.renderer.backgroundColor = 0xff0000
+
 	for (let i = 0; i < 3; ++i) {
 	    for (let j = 0; j < 3; ++j) {
 		const idx = this.puzzle[i][j]
@@ -101,6 +123,8 @@ export default class JigsawPuzzle extends Screen {
 		draw_count += 1
 	    }
 	}
+
+	this.game.renderer.backgroundColor = last_bc
 
     }
 

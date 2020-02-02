@@ -7,7 +7,7 @@ import RedButton from "./red_button"
 import SimonSays from "./simon"
 import Status from "./status"
 import VertexPuzzle, {VertexReal} from "./vertex"
-import { MinigameType } from "./types"
+import { MinigameType, type_exclude } from "./types"
 
 import { background_image } from "./assets"
 
@@ -238,7 +238,7 @@ export default class Game {
 	const non_running_minigames = []
 
 	for (const ty in MinigameType) {
-	    if (this.minigames[MinigameType[ty]].deactivated) {
+	    if (this.minigames[MinigameType[ty]].deactivated && type_exclude.indexOf(MinigameType[ty]) < 0) {
 		non_running_minigames.push(ty)
 	    }
 	}

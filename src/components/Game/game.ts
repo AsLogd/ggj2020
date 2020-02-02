@@ -58,6 +58,8 @@ export default class Game {
 
 	this.lives = 4
 
+
+	this.over_song = false
 	this.keys = {}
 
 	this.minigames = {
@@ -106,20 +108,22 @@ export default class Game {
     		case 0:
     			this.audio.playEffect(Effect.LASER_BEAM, {pan:-1})
     			setTimeout(() => { this.audio.playEffect(Effect.FADED_BEEP, {pan: -0.8, rate: 0.8, volume:0.5})}, 100)
-    			this.shield_activation = 100
+    			setTimeout(() => {this.shield_activation = 100}, 100)
     			break
     		case 1:
 				setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan:0.2, rate: 1.5, volume:0.5})}, 100)
     			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0.7, rate: 1.3, volume:0.3})}, 1000)
     			setTimeout(() => { this.audio.playEffect(Effect.FADED_BEEP, {pan:1, rate:1.3,volume:0.5})}, 1000)
-    			this.shield_activation = 100
+    			setTimeout(() => {this.shield_activation = 100}, 1000)
+    			
     			break
     		case 1:
 				setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan:0.2, rate: 1.5, volume:0.5})}, 100)
     			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0.7, rate: 1.2, volume:0.6})}, 200)
     			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0.7, rate: 0.9, volume:0.7})}, 400)
     			setTimeout(() => { this.audio.playEffect(Effect.FADED_BEEP, {pan:1,volume:0.5})}, 450)
-    			this.shield_activation = 100
+    			setTimeout(() => {this.shield_activation = 100}, 450)
+    			
     			break
     	}
     	if(this.lives <= 2) {
@@ -151,7 +155,6 @@ export default class Game {
 	this.update_difficulty()
 
 	this.shield_activation = Math.max(0, this.shield_activation - dt*100)
-	this.ambientAudio()
 
 	if (this.lives <= 0) {
 	    this.lost = true
@@ -185,25 +188,32 @@ export default class Game {
 	this.stage.position.y += (Math.random() - (0.5 + far_y * this.correction_dampening)) * this.shaking_distance 
 
 	if (this.lost) {
-		this.audio.playSong(Song.DEAD)
+		if(!this.over_song) {
+			this.audio.playSong(Song.GAME_OVER)
+			this.over_song = true
+		}
 	    this.minigames[MinigameType.JIGSAW_PUZZLE].sprite.rotation = 0.5 + Math.cos(this.total_time) * 0.1
 	    this.minigames[MinigameType.VERTEX_COUNT_REAL].sprite.rotation = 0.5 + Math.cos(this.total_time + 4) * 0.1
 	    this.minigames[MinigameType.VERTEX_COUNT].sprite.rotation = 0.5 + Math.cos(this.total_time + 10) * 0.1
 	    this.minigames[MinigameType.SIMON_SAYS].sprite.rotation = 0.5 + Math.cos(this.total_time + 7) * 0.1
 	}
+	else {
+		this.ambientAudio()
 
-	this.minigames[MinigameType.JIGSAW_PUZZLE].update(dt)
-	this.minigames[MinigameType.VERTEX_COUNT].update(dt)
-	this.minigames[MinigameType.VERTEX_COUNT_REAL].update(dt)
-	this.minigames[MinigameType.SIMON_SAYS].update(dt)
-	this.minigames[MinigameType.RED_BUTTON].update(dt)
-	this.minigames[MinigameType.STATUS].update(dt)
+		this.minigames[MinigameType.JIGSAW_PUZZLE].update(dt)
+		this.minigames[MinigameType.VERTEX_COUNT].update(dt)
+		this.minigames[MinigameType.VERTEX_COUNT_REAL].update(dt)
+		this.minigames[MinigameType.SIMON_SAYS].update(dt)
+		this.minigames[MinigameType.RED_BUTTON].update(dt)
+		this.minigames[MinigameType.STATUS].update(dt)
 
-	if (this.time_until_next_minigame <= 0) {
-	    this.time_until_next_minigame = this.time_between_minigames
-	    this.spawn_minigame()
+		if (this.time_until_next_minigame <= 0) {
+		    this.time_until_next_minigame = this.time_between_minigames
+		    this.spawn_minigame()
+		}
+	    }
+
 	}
-    }
 
     register_keys(minigame, keys) {
 	for (const key of keys) {

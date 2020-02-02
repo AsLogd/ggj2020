@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js"
 
+import Audio, {Song} from "./audio"
 import Screen from "./screen"
 import JigsawPuzzle from "./jigsaw"
 import { MinigameType } from "./types"
@@ -21,14 +22,18 @@ export default class Game {
 
     minigames: {}
 
-    constructor(canvas) {
-	PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES, 16);
-	this.renderer = new PIXI.autoDetectRenderer({ width: 1280, height: 720, view: canvas })
-	this.stage = new PIXI.Container()
-	// TODO(Marce): Make blur over
-	// this.stage.filters = [new PIXI.filters.BlurFilter(1)]
-	this.stage.pivot = { x: 1/2, y: 1/2 }
-	
+    audio: Audio
+
+    constructor(canvas, audio) {
+	    this.audio = audio
+	    // TODO: if calling before menu song is playing, the menu song will override this song.
+	    // remove setTimeout when menu is rendred. Maybe wait for audio to be loaded and decoded before starting the game
+	    setTimeout(() => {
+		    this.audio.playSong(Song.PLAYING)
+	    }, 3000)
+	    PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES, 16);
+	    this.renderer = new PIXI.autoDetectRenderer({ width: 1280, height: 720, view: canvas })
+	    this.stage = new PIXI.Container()
 
 	this.time_between_minigames = 3
 	this.time_until_next_minigame = this.time_between_minigames

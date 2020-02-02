@@ -2,6 +2,9 @@ import React from 'react'
 import { render } from 'react-dom'
 import hotkeys from "hotkeys-js"
 
+import Audio, { Song, Effect } from "./components/Game/audio"
+
+
 import Menu from "components/View/Menu/Menu"
 import Toggle from "components/Toggle/Toggle"
 import Repair from "components/Game/Repair"
@@ -25,19 +28,27 @@ class App extends React.Component<{}, AppState> {
 		view: AppView.MAIN_MENU
 	}
 
-	componentDidUpdate() {
+	audio: Audio = new Audio()
+
+	componentDidMount() {
 		hotkeys("esc", (event) => {
 			this.changeView(AppView.MAIN_MENU)
 		})
+		this.audio.playSong(Song.MENU)
 	}
 
 	changeView = (view: AppView) => {
 		this.setState({ view })
 	}
 
+	getAudio = () => {
+		return this.audio
+	}
+
 	contextImp() {
 		return {
-			changeView: this.changeView
+			changeView: this.changeView,
+			getAudio: this.getAudio
 		}
 	}
 
@@ -70,12 +81,42 @@ class App extends React.Component<{}, AppState> {
 		)
 	}
 
+	handleEffectClick = (effect: Effect) => () => {
+		return(
+			this.audio.playEffect(effect)
+		)
+	}
+
+	renderAudioTestBed() {
+		const effects : any= []
+		for( const val in Effect) {
+			effects.push(val)
+		}
+		return(
+			<div className="effects-testbed">
+				{
+					effects.map(effect => 
+						<div className="effect" onClick={this.handleEffectClick(effect)}>
+							{"a"+effect}
+						</div>	
+					)
+				}
+			</div>
+		)
+	}
+
 	render() {
+		
 		return (
 			<div className="App-component">
 				<div className="App-component__view-container">
 					<div className="App-component__view">
-						<Repair />
+						<AppContext.Provider value={this.contextImp()}>
+
+							<Repair />
+
+							{ /*this.renderAudioTestBed()*/ }
+						</AppContext.Provider>
 					</div>
 				</div>
 			</div>

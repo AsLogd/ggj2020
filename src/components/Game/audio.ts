@@ -67,6 +67,11 @@ const songFileUrls = {
 
 const effectSpriteSoundUrl = require("../../../public/audio/FX_File_ext.ogg")
 
+interface AudioOptions {
+	pos?: [number, number, number]
+	pan?: number
+}
+
 export default class Audio {
 	songs: Howl[] = []
 	songsDict = {}
@@ -84,6 +89,13 @@ export default class Audio {
 			src: [ effectSpriteSoundUrl ],
 			sprite: effectData
 		})
+		this.effects.pannerAttr({
+			panningModel: 'HRTF',
+			refDistance: 0.8,
+			rolloffFactor: 2.5,
+			distanceModel: "linear",
+			maxDistance: 1000
+		});
 	}
 
 	playSong(song: Song) {
@@ -91,7 +103,16 @@ export default class Audio {
 		this.songsDict[song].play()
 	}
 
-	playEffect(effect: Effect) {
-		this.effects.play(effect)
+	playEffect(effect: Effect, opt?: AudioOptions) {
+		const id = this.effects.play(effect)
+		if(opt){
+			if(opt.pos){
+				const [x,y,z] = opt.pos
+				this.effects.pos(x,y,z, id)
+			}
+			if(opt.pan) {
+				this.effects.stereo(opt.pan, id)
+			}
+		}
 	}
 }

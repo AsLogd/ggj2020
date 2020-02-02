@@ -3,7 +3,8 @@ import * as PIXI from "pixi.js"
 import Audio, {Song} from "./audio"
 import Screen from "./screen"
 import JigsawPuzzle from "./jigsaw"
-import VertexPuzzle from "./vertex"
+import SimonSays from "./simon"
+import VertexPuzzle, {VertexReal} from "./vertex"
 import { MinigameType } from "./types"
 
 import { background_image } from "./assets"
@@ -53,16 +54,18 @@ export default class Game {
 
 	this.booting = true
 
+	this.lives = 5
+
 	this.keys = {}
 
 	this.minigames = {
 	    [MinigameType.JIGSAW_PUZZLE]: new JigsawPuzzle(this, [440, 430], [390, 180]),
 	    [MinigameType.VERTEX_COUNT]: new VertexPuzzle(this, [440, 65], [390, 245]),
-	    [MinigameType.SIMON_SAYS]: new JigsawPuzzle(this, [150, 400], [200, 200]),
+	    [MinigameType.SIMON_SAYS]: new SimonSays(this, [60, 510], [320, 110]),
+	    [MinigameType.VERTEX_COUNT_REAL]: new VertexReal(this, [60, 65], [320, 285]),
 	}
 
-	const texture = this.minigames[MinigameType.JIGSAW_PUZZLE].texture
-	this.one_screen = PIXI.Sprite.from(texture)
+	this.minigames[MinigameType.VERTEX_COUNT_REAL].booting = false
 
 	document.addEventListener('keydown', this.process_keypress.bind(this))
 
@@ -80,9 +83,17 @@ export default class Game {
 	}
     }
 
+    loseLife() {
+	this.lives -= 1
+    }
+
     update(dt) {
 	this.total_time += dt
 	this.update_difficulty()
+
+	if (this.lives <= 0) {
+	    this.lost = true
+	}
 
 	if (!this.booting) {
 	    this.time_until_next_minigame -= dt
@@ -106,11 +117,21 @@ export default class Game {
 	this.stage.position.x += (Math.random() - (0.5 + far_x * this.correction_dampening)) * this.shaking_distance
 	this.stage.position.y += (Math.random() - (0.5 + far_y * this.correction_dampening)) * this.shaking_distance
 
+	if (this.lost) {
+	    this.minigames[MinigameType.JIGSAW_PUZZLE].sprite.rotation = 0.5 + Math.cos(this.total_time) * 0.1
+	    this.minigames[MinigameType.VERTEX_COUNT_REAL].sprite.rotation = 0.5 + Math.cos(this.total_time + 4) * 0.1
+	    this.minigames[MinigameType.VERTEX_COUNT].sprite.rotation = 0.5 + Math.cos(this.total_time + 10) * 0.1
+	    this.minigames[MinigameType.SIMON_SAYS].sprite.rotation = 0.5 + Math.cos(this.total_time + 7) * 0.1
+	}
+
 	this.minigames[MinigameType.JIGSAW_PUZZLE].update(dt)
+	this.minigames[MinigameType.VERTEX_COUNT].update(dt)
+	this.minigames[MinigameType.VERTEX_COUNT_REAL].update(dt)
+	this.minigames[MinigameType.SIMON_SAYS].update(dt)
 
 	if (this.time_until_next_minigame <= 0) {
 	    this.time_until_next_minigame = this.time_between_minigames
-	    this.spawn_minigame()
+	    // this.spawn_minigame()
 	}
     }
 
@@ -127,6 +148,8 @@ export default class Game {
     draw() {
 	this.minigames[MinigameType.JIGSAW_PUZZLE].draw()
 	this.minigames[MinigameType.VERTEX_COUNT].draw()
+	this.minigames[MinigameType.VERTEX_COUNT_REAL].draw()
+	this.minigames[MinigameType.SIMON_SAYS].draw()
 
 	this.renderer.render(this.stage)
     }

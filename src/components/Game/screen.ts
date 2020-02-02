@@ -4,7 +4,7 @@ import { Key, MinigameType } from "./types"
 import { potato, screen_frag } from "./assets"
 import { TextBuffer } from "./textbuffer.ts"
 import {CRTFilter} from '@pixi/filter-crt';
-import {GlowFilter} from '@pixi/filter-glow';
+import {BloomFilter} from '@pixi/filter-bloom';
 
 // First, checks if it isn't implemented yet.
 if (!String.prototype.format) {
@@ -114,7 +114,7 @@ export default class Screen {
     }
 
     SUBSYSTEM_SENTENCES = {
-	[MinigameType.JIGSAW_PUZZLE]: [
+	[MinigameType.SIMON_SAYS]: [
 	    {text: "HIT: {0} dB {1}P", formatfn: format_hit},
 	    {text: "LAR: {0}rad", formatfn: format_angle},
 	    {text: "> ACK"},
@@ -123,6 +123,14 @@ export default class Screen {
 	    {text: "Capacitor #{0} Depleted", formatfn: format_capacitor}
 	],
 	[MinigameType.VERTEX_COUNT]: [
+	    {text: "HIT: {0} dB {1}P", formatfn: format_hit},
+	    {text: "LAR: {0}rad", formatfn: format_angle},
+	    {text: "> ACK"},
+	    {text: "< ALOH"},
+	    {text: "DEC -> {0} <- {1}", formatfn: format_hit},
+	    {text: "Capacitor #{0} Depleted", formatfn: format_capacitor}
+	],
+	[MinigameType.JIGSAW_PUZZLE]: [
 	    {text: "HIT: {0} dB {1}P", formatfn: format_hit},
 	    {text: "LAR: {0}rad", formatfn: format_angle},
 	    {text: "> ACK"},
@@ -144,16 +152,11 @@ export default class Screen {
 	this.texture = PIXI.RenderTexture.create(size[0], size[1])
 	this.sprite = PIXI.Sprite.from(this.texture)
 	this.sprite.position = { x: pos[0], y: pos[1] }
-	this.sprite.filters = [new GlowFilter()]
 
 	this.time_until_new_sentence = 0.2
 	this.next_sentence_in = 0.2
 
 	this.game.stage.addChild(this.sprite)
-
-	this.renderer = PIXI.autoDetectRenderer({
-	    backgroundColor: 0xff0000
-	})
 
 	this.screen_tb = new TextBuffer(size[0], size[1])
 
@@ -178,7 +181,7 @@ export default class Screen {
 					 lineContrast: 0.08,
 					 vignettingAlpha: 0.5,
 					 lineWidth: 20})
-	this.sprite.filters = [this.crt_filter]
+	this.sprite.filters = [this.crt_filter, new BloomFilter({blur: 10})]
 	this.background.filters = [this.crt_filter]
 
 	this.game.register_keys(minigametype, keys)
@@ -195,8 +198,7 @@ export default class Screen {
 	this.text.filters = [this.crt_filter]
     }
 
-    update(dt: number) {
-    }
+    update(dt: number) {}
 
     activate(difficulty) {
 	this.deactivated = false
@@ -217,7 +219,6 @@ export default class Screen {
 	    this.draw_idle()
 	} else {
 	    this.draw_game()
-	    this.game.renderer.render(this.text, this.texture, false)
 	}
     }
 
@@ -227,7 +228,7 @@ export default class Screen {
 
 	let skip_render = false;
 
-	if (this.booting) {
+	if (this.booting && this.BOOT_SEQUENCE[this.type]) {
 	    if (this.current_boot_idx === this.BOOT_SEQUENCE[this.type].length) {
 		this.booting = false
 	    }
@@ -307,7 +308,7 @@ export default class Screen {
 	if (!skip_render) {
 	    this.text = new PIXI.Text(this.screen_tb.getText(), this.text_style)
 	    r.render(this.text, this.texture, false)
-	    r.render(this.sprite, this.texture, false)
+	    // r.render(this.sprite, this.texture, false)
 	}
 	else {
 	    r.render(this.bbackground, this.texture)

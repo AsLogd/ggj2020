@@ -30,6 +30,7 @@ export default class JigsawPuzzle extends Screen {
 	this.puzzle_sprite = PIXI.Sprite.from(map)
 	
 	this.puzzle = []
+	this.time_to_lose = 10
 
 	for (let i = 0; i < 3; ++i) {
 	    this.puzzle[i] = []
@@ -64,6 +65,9 @@ export default class JigsawPuzzle extends Screen {
 		iters += 1
 	    }
 	}
+
+	this.time_to_lose = 10 - difficulty
+	this.timeout = 0
     }
 
     update(dt: number) {
@@ -81,6 +85,11 @@ export default class JigsawPuzzle extends Screen {
 		    return;
 		}
 	    }
+	}
+
+	this.timeout += dt
+	if (this.timeout >= this.time_to_lose) {
+	    this.game.loseLife()
 	}
 
 	this.deactivated = true

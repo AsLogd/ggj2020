@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js"
 import Audio, {Song} from "./audio"
 import Screen from "./screen"
 import JigsawPuzzle from "./jigsaw"
+import SimonSays from "./simon"
 import { MinigameType } from "./types"
 
 import { background_image } from "./assets"
@@ -51,7 +52,7 @@ export default class Game {
 	this.minigames = {
 	    [MinigameType.JIGSAW_PUZZLE]: new JigsawPuzzle(this, [440, 430], [400, 180]),
 	    [MinigameType.VERTEX_COUNT]: new JigsawPuzzle(this, [440, 60], [400, 240]),
-	    [MinigameType.SIMON_SAYS]: new JigsawPuzzle(this, [150, 400], [200, 200]),
+	    [MinigameType.SIMON_SAYS]: new SimonSays(this, [60, 510], [320, 110]),
 	}
 
 
@@ -84,6 +85,7 @@ export default class Game {
 	this.stage.position.z = -1
 
 	this.minigames[MinigameType.JIGSAW_PUZZLE].update(dt)
+	this.minigames[MinigameType.SIMON_SAYS].update(dt)
 
 	if (this.time_until_next_minigame <= 0) {
 	    this.time_until_next_minigame = this.time_between_minigames
@@ -105,6 +107,8 @@ export default class Game {
 
 	this.minigames[MinigameType.JIGSAW_PUZZLE].draw()
 	this.minigames[MinigameType.VERTEX_COUNT].draw()
+	this.minigames[MinigameType.SIMON_SAYS].draw()
+
 
 	this.renderer.render(this.stage)
     }

@@ -196,6 +196,8 @@ export default class Game {
 	    this.minigames[MinigameType.VERTEX_COUNT_REAL].sprite.rotation = 0.5 + Math.cos(this.total_time + 4) * 0.1
 	    this.minigames[MinigameType.VERTEX_COUNT].sprite.rotation = 0.5 + Math.cos(this.total_time + 10) * 0.1
 	    this.minigames[MinigameType.SIMON_SAYS].sprite.rotation = 0.5 + Math.cos(this.total_time + 7) * 0.1
+	    
+
 	}
 	else {
 		this.ambientAudio()
@@ -226,6 +228,18 @@ export default class Game {
     }
 
     draw() {
+    	if(this.lost) {
+    		const text_style = new PIXI.TextStyle({
+			    fontFamily: 'Commodore',
+			    fontSize: 26,
+			    fill: '#ffb72a',
+			    wordWrap: true,
+			    wordWrapWidth: 440,
+			});
+		    const text = new PIXI.Text("GAME OVER", text_style)
+		    text.position.set(1280/2-50, 720/2-10)
+		    this.stage.addChild(text)
+    	}
 	this.minigames[MinigameType.JIGSAW_PUZZLE].draw()
 	this.minigames[MinigameType.VERTEX_COUNT].draw()
 	this.minigames[MinigameType.VERTEX_COUNT_REAL].draw()

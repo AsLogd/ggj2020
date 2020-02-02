@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js"
 
-import Audio, {Song} from "./audio"
+import Audio, {Song, Effect} from "./audio"
 import Screen from "./screen"
 import JigsawPuzzle from "./jigsaw"
 import SimonSays from "./simon"
@@ -156,6 +156,42 @@ export default class Game {
 	const random_type_name = MinigameType[random_type]
 
 	this.minigames[random_type_name].activate(3)
+	this.playImpactEffect()
+    }
+
+    playImpactEffect(){
+    	const c = Math.floor(Math.random()*5)
+    	switch(c)
+    	{
+    		case 0:
+    			this.audio.playEffect(Effect.BULLET_IMPACT)
+    			setTimeout(() => { this.audio.playEffect(Effect.EXPLOSION)}, 500)
+    			break
+    		case 1:
+    			this.audio.playEffect(Effect.IMPACT_EXPLOSION, {pan: -0.5})
+    			setTimeout(() => { this.audio.playEffect(Effect.RESENTING_HULL, {pan: -1})}, 100)
+    			break
+    		case 2:
+    			this.audio.playEffect(Effect.LASER_BEAM)
+    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan:-1})}, 300)
+    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: -0.8})}, 500)
+    			setTimeout(() => { this.audio.playEffect(Effect.DEEP_EXPLOSION, {pan: -0.3})}, 500)
+    			setTimeout(() => { this.audio.playEffect(Effect.EXPLOSION, {pan: 0})}, 800)
+    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: -0.3})}, 900)
+    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: -0.1})}, 1500)
+    			setTimeout(() => { this.audio.playEffect(Effect.LASER_BEAM, {pan: 0})}, 2000)
+    			break
+    		case 3:
+    			this.audio.playEffect(Effect.IMPACT_EXPLOSION, {pan: 0.6})
+    			setTimeout(() => { this.audio.playEffect(Effect.DESTRUCTION, {pan: 0.7})}, 300)
+    			setTimeout(() => { this.audio.playEffect(Effect.RESENTING_HULL, {pan: 1})}, 1000)
+    			break
+    		case 4:
+    			this.audio.playEffect(Effect.BULLET_IMPACT, {pan: -0.5})
+    			setTimeout(() => { this.audio.playEffect(Effect.BULLET_IMPACT, {pan: 0.5})}, 200)
+    			setTimeout(() => { this.audio.playEffect(Effect.DESTRUCTION, {pan: 0.7})}, 300)
+    			break
+    	}
     }
 
     update_difficulty() {
